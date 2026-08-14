@@ -40,30 +40,12 @@ export default async function handler(req, res) {
     const prompt = `
 Sei un esperto di reselling di moda e streetwear.
 
-Analizza attentamente la foto.
+Analizza attentamente la foto dell'articolo.
 
-Restituisci esclusivamente JSON valido:
+Non inventare informazioni che non sono visibili.
+Se un'informazione non può essere determinata dalla foto, usa "Non identificato".
 
-{
-  "brand": "",
-  "model": "",
-  "category": "",
-  "color": "",
-  "size": "",
-  "condition": "",
-  "confidence": 0,
-  "estimated_price_eur": 0,
-  "quick_sale_price_eur": 0,
-  "estimated_days": "",
-  "title": "",
-  "description": "",
-  "hashtags": []
-}
-
-Non inventare dettagli non visibili.
-Se un dato non è identificabile usa "Non identificato".
-confidence deve essere compreso tra 0 e 1.
-I prezzi devono essere stime prudenti del mercato europeo dell'usato.
+Restituisci un JSON conforme esattamente allo schema richiesto.
 
 Marketplace: ${marketplace}
 Strategia: ${goal}
@@ -80,6 +62,7 @@ Strategia: ${goal}
         },
         body: JSON.stringify({
           model: "gemini-3.6-flash",
+
           input: [
             {
               type: "text",
@@ -91,8 +74,46 @@ Strategia: ${goal}
               mime_type: mimeType
             }
           ],
+
           response_format: {
-            type: "json"
+            type: "text",
+            mime_type: "application/json",
+            schema: {
+              type: "object",
+              properties: {
+                brand: { type: "string" },
+                model: { type: "string" },
+                category: { type: "string" },
+                color: { type: "string" },
+                size: { type: "string" },
+                condition: { type: "string" },
+                confidence: { type: "number" },
+                estimated_price_eur: { type: "number" },
+                quick_sale_price_eur: { type: "number" },
+                estimated_days: { type: "string" },
+                title: { type: "string" },
+                description: { type: "string" },
+                hashtags: {
+                  type: "array",
+                  items: { type: "string" }
+                }
+              },
+              required: [
+                "brand",
+                "model",
+                "category",
+                "color",
+                "size",
+                "condition",
+                "confidence",
+                "estimated_price_eur",
+                "quick_sale_price_eur",
+                "estimated_days",
+                "title",
+                "description",
+                "hashtags"
+              ]
+            }
           }
         })
       }
@@ -101,7 +122,7 @@ Strategia: ${goal}
     const data = await response.json();
 
     if (!response.ok) {
-      console.error("Gemini error:", data);
+      console.error("Gemini API error:", data);
 
       return res.status(response.status).json({
         error:
@@ -111,13 +132,16 @@ Strategia: ${goal}
     }
 
     const text =
+      data?.output_text ||
       data?.steps
-        ?.filter(step => step.type === "model_output")
         ?.flatMap(step => step.content || [])
         ?.find(content => content.type === "text")
-        ?.text || "";
+        ?.text ||
+      "";
 
     if (!text) {
+      console.error("Gemini response:", data);
+
       return res.status(500).json({
         error: "Gemini non ha restituito un risultato."
       });
@@ -127,8 +151,8 @@ Strategia: ${goal}
 
     try {
       result = JSON.parse(text);
-    } catch {
-      console.error("Invalid Gemini JSON:", text);
+    } catch (error) {
+      console.error("Invalid JSON from Gemini:", text);
 
       return res.status(500).json({
         error: "La risposta Gemini non è nel formato previsto."
@@ -141,7 +165,9 @@ Strategia: ${goal}
     console.error("Analyze error:", error);
 
     return res.status(500).json({
-      error: error?.message || "Errore durante l'analisi AI."
+      error:
+        error?.message ||
+        "Errore durante l'analisi AI."
     });
   }
 }
