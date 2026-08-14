@@ -4,11 +4,11 @@ export default async function handler(req, res) {
   }
 
   try {
-    const apiKey = process.env.OPENAI_API_KEY;
+    const apiKey = process.env.GEMINI_API_KEY;
 
     if (!apiKey) {
       return res.status(500).json({
-        error: "OPENAI_API_KEY non configurata su Vercel."
+        error: "GEMINI_API_KEY non configurata su Vercel."
       });
     }
 
@@ -21,48 +21,27 @@ export default async function handler(req, res) {
       });
     }
 
-    // Verifica che l'immagine sia una Data URL valida
     const match = image.match(
       /^data:(image\/(?:jpeg|jpg|png|webp));base64,([A-Za-z0-9+/=]+)$/
     );
 
     if (!match) {
       return res.status(400).json({
-        error:
-          "Formato immagine non valido. Usa JPG, PNG o WEBP."
+        error: "Formato immagine non valido. Usa JPG, PNG o WEBP."
       });
     }
 
     const mimeType = match[1];
     const base64Data = match[2];
 
-    // Ricostruisce una Data URL pulita
-    const cleanImage = `data:${mimeType};base64,${base64Data}`;
-
-    const openaiResponse = await fetch(
-      "https://api.openai.com/v1/responses",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${apiKey}`
-        },
-        body: JSON.stringify({
-          model: "gpt-4.1-mini",
-          input: [
-            {
-              role: "user",
-              content: [
-                {
-                  type: "input_text",
-                  text: `
+    const prompt = `
 Sei un esperto di reselling di moda e streetwear.
 
-Analizza attentamente l'immagine.
+Analizza attentamente la foto.
 
-Restituisci esclusivamente un JSON valido, senza markdown e senza testo aggiuntivo.
+Restituisci ESCLUSIVAMENTE JSON valido, senza markdown e senza testo aggiuntivo.
 
-Struttura obbligatoria:
+Struttura:
 
 {
   "brand": "",
@@ -81,69 +60,80 @@ Struttura obbligatoria:
 }
 
 Regole:
-- Non inventare caratteristiche che non puoi vedere.
-- Se un dato non è leggibile usa "Non identificato".
-- La confidence deve essere un numero tra 0 e 1.
-- I prezzi devono essere prudenti e indicativi del mercato europeo dell'usato.
-- La condizione deve basarsi esclusivamente su ciò che è visibile.
-- Crea un titolo adatto al marketplace.
+- Non inventare dettagli non visibili.
+- Se non puoi identificare qualcosa usa "Non identificato".
+- confidence deve essere un numero tra 0 e 1.
+- I prezzi devono essere stime prudenti del mercato europeo dell'usato.
+- La condizione deve basarsi esclusivamente sulla foto.
+- Crea un titolo adatto a ${marketplace}.
 - Crea una descrizione pronta per la pubblicazione.
-- Gli hashtag devono essere un array di stringhe.
+- hashtags deve essere un array di stringhe.
 
 Marketplace: ${marketplace}
 Strategia: ${goal}
-`
+`;
+
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          contents: [
+            {
+              parts: [
+                {
+                  text: prompt
                 },
                 {
-                  type: "input_image",
-                  image_url: cleanImage
+                  inline_data: {
+                    mime_type: mimeType,
+                    data: base64Data
+                  }
                 }
               ]
             }
           ],
-          max_output_tokens: 1200
+          generationConfig: {
+            responseMimeType: "application/json",
+            temperature: 0.2
+          }
         })
       }
     );
 
-    const data = await openaiResponse.json();
+    const data = await response.json();
 
-    if (!openaiResponse.ok) {
-      console.error("OpenAI error:", data);
+    if (!response.ok) {
+      console.error("Gemini error:", data);
 
-      return res.status(openaiResponse.status).json({
+      return res.status(response.status).json({
         error:
           data?.error?.message ||
-          "OpenAI ha rifiutato la richiesta."
+          "Gemini ha rifiutato la richiesta."
       });
     }
 
     const text =
-      data.output
-        ?.flatMap((item) => item.content || [])
-        ?.find((part) => part.type === "output_text")
-        ?.text || "";
+      data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
 
     if (!text) {
       return res.status(500).json({
-        error: "OpenAI non ha restituito un risultato."
+        error: "Gemini non ha restituito un risultato."
       });
     }
-
-    const cleaned = text
-      .replace(/^```json\s*/i, "")
-      .replace(/\s*```$/i, "")
-      .trim();
 
     let result;
 
     try {
-      result = JSON.parse(cleaned);
-    } catch (parseError) {
-      console.error("JSON parse error:", cleaned);
+      result = JSON.parse(text);
+    } catch (error) {
+      console.error("Gemini JSON error:", text);
 
       return res.status(500).json({
-        error: "La risposta AI non è nel formato previsto."
+        error: "La risposta Gemini non è nel formato previsto."
       });
     }
 
@@ -155,7 +145,7 @@ Strategia: ${goal}
     return res.status(500).json({
       error:
         error?.message ||
-        "Errore imprevisto durante l'analisi AI."
+        "Errore durante l'analisi AI."
     });
   }
 }
