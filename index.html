@@ -23,7 +23,120 @@ let market="Vinted",goal="Equilibrato",ready=false;
 function render(){markets.innerHTML=Object.keys(D).map(x=>`<div class="market ${x==market?'sel':''}" onclick="market='${x}';render()"><span>${x}</span><b>›</b></div>`).join("");goals.innerHTML=["Veloce","Equilibrato","Profitto"].map(x=>`<button class="btn ${x==goal?'primary':''}" onclick="goal='${x}';render()">${x}</button>`).join("");let d=D[market],m=goal=="Veloce"?.84:goal=="Profitto"?1.14:1,p=Math.round(d.p*m);mname.textContent=market;price.textContent="€ "+p;fast.textContent="€ "+d.f;prob.textContent=d.q+"%";speed.textContent=d.t;if(ready)listing.textContent=`Titolo: Palm Angels Tokyo Logo T-Shirt Black – Size L\n\nDescrizione:\nT-shirt Palm Angels nera con logo Tokyo. Taglia L, ottime condizioni. Foto reali dell'articolo. Spedizione rapida.\n\nBrand: Palm Angels\nCategoria: T-shirt\nTaglia: L\nCondizione: Ottima\nPrezzo su ${market}: € ${p}\n\n#palmangels #streetwear #designer #tshirt`}
 file.onchange=e=>{let f=e.target.files[0];if(!f)return;photo.src=URL.createObjectURL(f);photo.classList.remove("hide");analyzeBtn.disabled=false};
 function resetPhoto(){file.value="";photo.classList.add("hide");analyzeBtn.disabled=true;ready=false;status.textContent="In attesa della foto";bar.style.width="0%";brand.textContent=cat.textContent=cond.textContent="—";listing.textContent="Carica e analizza una foto per generare il testo."}
-function analyze(){status.textContent="Analisi articolo…";bar.style.width="35%";setTimeout(()=>{bar.style.width="75%";setTimeout(()=>{ready=true;bar.style.width="100%";status.textContent="Analisi completata";brand.textContent="Palm Angels";cat.textContent="T-shirt";cond.textContent="Ottima";render()},500)},500)}
+async function analyze(){
+  const f=file.files[0];
+
+  if(!f){
+    alert("Carica prima una foto.");
+    return;
+  }
+
+  status.textContent="Preparazione immagine…";
+  bar.style.width="20%";
+  analyzeBtn.disabled=true;
+
+  try{
+    const image=await fileToDataURL(f);
+
+    status.textContent="Vision AI sta analizzando…";
+    bar.style.width="50%";
+
+    const response=await fetch("/api/analyze",{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify({
+        image,
+        marketplace:market,
+        goal
+      })
+    });
+
+    const data=await response.json();
+
+    if(!response.ok){
+      throw new Error(data.error || "Errore durante l'analisi.");
+    }
+
+    bar.style.width="85%";
+
+    brand.textContent=data.brand || "Non identificato";
+    cat.textContent=data.category || "Non identificato";
+    cond.textContent=data.condition || "Non identificato";
+
+    const targetPrice=
+      goal==="Veloce"
+        ? data.quick_sale_price_eur
+        : data.estimated_price_eur;
+
+    price.textContent=
+      "€ "+(Number(targetPrice)||0);
+
+    fast.textContent=
+      "€ "+(Number(data.quick_sale_price_eur)||0);
+
+    speed.textContent=
+      data.estimated_days || "—";
+
+    prob.textContent=
+      data.confidence
+        ? Math.round(Number(data.confidence)*100)+"%"
+        : "—";
+
+    const hashtags=Array.isArray(data.hashtags)
+      ? data.hashtags.join(" ")
+      : "";
+
+    listing.textContent=
+`Titolo:
+${data.title || "Titolo non disponibile"}
+
+Descrizione:
+${data.description || "Descrizione non disponibile"}
+
+Brand: ${data.brand || "Non identificato"}
+Modello: ${data.model || "Non identificato"}
+Categoria: ${data.category || "Non identificato"}
+Colore: ${data.color || "Non identificato"}
+Taglia: ${data.size || "Non identificata"}
+Condizione: ${data.condition || "Non identificata"}
+
+Prezzo consigliato su ${market}: € ${Number(targetPrice)||0}
+Vendita rapida: € ${Number(data.quick_sale_price_eur)||0}
+
+${hashtags}`;
+
+    ready=true;
+    status.textContent="Analisi completata ✓";
+    bar.style.width="100%";
+
+  }catch(error){
+    console.error(error);
+
+    status.textContent="Errore durante l'analisi";
+    bar.style.width="0%";
+
+    alert(error.message || "Non è stato possibile analizzare la foto.");
+
+  }finally{
+    analyzeBtn.disabled=false;
+  }
+}
+
+function fileToDataURL(file){
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+
+    reader.onload=()=>{
+      resolve(reader.result);
+    };
+
+    reader.onerror=reject;
+
+    reader.readAsDataURL(file);
+  });
+}
 function copyListing(){navigator.clipboard?.writeText(listing.textContent);alert("Annuncio copiato negli appunti.")}
 function aiImage(){alert("Il pulsante è pronto: nel prossimo step collegheremo il generatore AI per sfondo, crop e immagini ottimizzate per il marketplace.")}
 function compare(){alert(Object.entries(D).map(([k,v])=>`${k}: €${v.p} · ${v.q}% · ${v.t}`).join("\n"))}
