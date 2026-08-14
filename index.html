@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#111111">
+
   <title>ResellAI Studio</title>
 
   <style>
@@ -13,9 +13,15 @@
 
     body {
       margin: 0;
-      background: #f4f4f1;
+      background: #f5f5f2;
       color: #111;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Arial,
+        sans-serif;
     }
 
     .container {
@@ -27,20 +33,20 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 18px 0;
+      padding: 20px 0;
     }
 
     .logo {
       font-size: 21px;
       font-weight: 900;
-      letter-spacing: -.04em;
+      letter-spacing: -0.04em;
     }
 
     .badge {
       background: #111;
       color: white;
+      border-radius: 999px;
       padding: 8px 12px;
-      border-radius: 99px;
       font-size: 11px;
       font-weight: 800;
     }
@@ -58,18 +64,18 @@
     }
 
     .hero h1 {
-      font-size: clamp(43px, 8vw, 76px);
+      font-size: clamp(42px, 8vw, 76px);
       line-height: .92;
       letter-spacing: -.065em;
-      margin: 10px 0 15px;
+      margin: 10px 0 16px;
       max-width: 850px;
     }
 
     .hero p {
       color: #777;
       font-size: 16px;
-      max-width: 700px;
       line-height: 1.5;
+      max-width: 700px;
     }
 
     .grid {
@@ -80,7 +86,7 @@
     }
 
     .card {
-      background: #fff;
+      background: white;
       border: 1px solid #e4e4e0;
       border-radius: 21px;
       padding: 20px;
@@ -93,7 +99,6 @@
 
     h2 {
       margin: 8px 0 17px;
-      letter-spacing: -.025em;
     }
 
     h3 {
@@ -108,12 +113,6 @@
       text-align: center;
       background: #fafaf8;
       cursor: pointer;
-      transition: .2s;
-    }
-
-    .upload:hover {
-      border-color: #111;
-      background: #f7f7f5;
     }
 
     .upload input {
@@ -133,13 +132,13 @@
       margin-top: 7px;
     }
 
-    .photo-counter {
+    .counter {
       margin-top: 12px;
       color: #777;
       font-size: 13px;
     }
 
-    .photo-grid {
+    .photos {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 9px;
@@ -170,7 +169,7 @@
       justify-content: center;
       border-radius: 50%;
       background: #111;
-      color: #fff;
+      color: white;
       font-size: 11px;
       font-weight: 800;
     }
@@ -183,10 +182,9 @@
       height: 27px;
       border: 0;
       border-radius: 50%;
-      background: #fff;
+      background: white;
       cursor: pointer;
       font-size: 18px;
-      line-height: 1;
       box-shadow: 0 2px 10px rgba(0,0,0,.2);
     }
 
@@ -212,7 +210,7 @@
       margin-top: 8px;
     }
 
-    .market-grid {
+    .markets {
       display: grid;
       gap: 8px;
     }
@@ -231,24 +229,17 @@
       background: #f7f7f5;
     }
 
-    .goal-row,
-    .button-row {
+    .goals,
+    .buttons {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-    }
-
-    .goal-row {
       margin-top: 10px;
-    }
-
-    .button-row {
-      margin-top: 12px;
     }
 
     .btn {
       border: 1px solid #ddd;
-      background: #fff;
+      background: white;
       color: #111;
       border-radius: 12px;
       padding: 11px 14px;
@@ -258,7 +249,7 @@
 
     .btn.primary {
       background: #111;
-      color: #fff;
+      color: white;
       border-color: #111;
     }
 
@@ -273,18 +264,17 @@
     }
 
     .progress {
-      width: 100%;
       height: 8px;
       border-radius: 99px;
       overflow: hidden;
       background: #e9e9e6;
     }
 
-    .progress-bar {
+    .bar {
       width: 0;
       height: 100%;
       background: #111;
-      transition: width .4s;
+      transition: width .3s;
     }
 
     .stats {
@@ -300,13 +290,13 @@
       background: #f6f6f3;
     }
 
-    .stat-label {
+    .label {
       display: block;
       color: #777;
       font-size: 11px;
     }
 
-    .stat-value {
+    .value {
       display: block;
       margin-top: 5px;
       font-size: 17px;
@@ -319,11 +309,6 @@
       font-weight: 950;
       letter-spacing: -.06em;
       margin: 10px 0 5px;
-    }
-
-    .price-label {
-      color: #777;
-      font-size: 13px;
     }
 
     .listing {
@@ -353,6 +338,7 @@
     }
 
     @media (max-width: 720px) {
+
       .grid {
         grid-template-columns: 1fr;
       }
@@ -361,7 +347,7 @@
         grid-column: auto;
       }
 
-      .photo-grid {
+      .photos {
         grid-template-columns: repeat(2, 1fr);
       }
 
@@ -381,32 +367,49 @@
 <div class="container">
 
   <header>
-    <div class="logo">ResellAI Studio</div>
-    <div class="badge">AI RESELLER</div>
+    <div class="logo">
+      ResellAI Studio
+    </div>
+
+    <div class="badge">
+      AI RESELLER
+    </div>
   </header>
 
+
   <section class="hero">
-    <div class="eyebrow">AI workspace per reseller</div>
+
+    <div class="eyebrow">
+      AI workspace per reseller
+    </div>
 
     <h1>
       Da 1–8 foto a un annuncio pronto.
     </h1>
 
     <p>
-      Carica le foto dell'articolo, aggiungi qualche dettaglio
-      e lascia che l'AI prepari un annuncio ottimizzato per la vendita.
+      Carica le foto, aggiungi qualche dettaglio
+      e lascia che l'AI prepari un annuncio
+      ottimizzato per la vendita.
     </p>
+
   </section>
 
+
   <div class="grid">
+
 
     <!-- FOTO -->
 
     <section class="card full">
 
-      <div class="eyebrow">01 · Fotografie</div>
+      <div class="eyebrow">
+        01 · Fotografie
+      </div>
 
-      <h2>📸 Foto dell'articolo</h2>
+      <h2>
+        📸 Foto dell'articolo
+      </h2>
 
       <label class="upload">
 
@@ -418,25 +421,26 @@
         >
 
         <span class="upload-title">
-          🖼️ Scegli fino a 8 foto dalla galleria
+          🖼️ Scegli fino a 8 foto
         </span>
 
         <span class="upload-subtitle">
-          Puoi selezionare più immagini contemporaneamente.
+          Puoi selezionarle direttamente dalla galleria.
+          Le foto verranno automaticamente compresse.
         </span>
 
       </label>
 
       <div
-        id="photoCounter"
-        class="photo-counter"
+        id="counter"
+        class="counter"
       >
         0 / 8 foto
       </div>
 
       <div
-        id="photoGrid"
-        class="photo-grid"
+        id="photos"
+        class="photos"
       ></div>
 
     </section>
@@ -446,18 +450,23 @@
 
     <section class="card full">
 
-      <div class="eyebrow">02 · Informazioni</div>
+      <div class="eyebrow">
+        02 · Informazioni
+      </div>
 
-      <h2>💬 Raccontaci qualcosa dell'articolo</h2>
+      <h2>
+        💬 Raccontaci qualcosa dell'articolo
+      </h2>
 
       <textarea
         id="userDescription"
-        placeholder="Esempio: Nike Air Max nere, taglia 42, indossate poche volte, scatola originale inclusa..."
+        placeholder="Es. Nike Air Max nere, taglia 42, indossate poche volte, scatola originale inclusa..."
       ></textarea>
 
       <div class="helper">
-        L'AI userà queste informazioni insieme alle fotografie.
-        Non inventerà caratteristiche che non risultano verificabili.
+        Più informazioni reali inserisci, più precisa
+        sarà l'analisi. L'AI non dovrebbe inventare
+        caratteristiche che non può verificare.
       </div>
 
     </section>
@@ -467,20 +476,26 @@
 
     <section class="card">
 
-      <div class="eyebrow">03 · Marketplace</div>
+      <div class="eyebrow">
+        03 · Marketplace
+      </div>
 
-      <h2>Dove vuoi venderlo?</h2>
+      <h2>
+        Dove vuoi venderlo?
+      </h2>
 
       <div
-        id="marketGrid"
-        class="market-grid"
+        id="markets"
+        class="markets"
       ></div>
 
-      <h3>Strategia prezzo</h3>
+      <h3>
+        Strategia prezzo
+      </h3>
 
       <div
-        id="goalRow"
-        class="goal-row"
+        id="goals"
+        class="goals"
       ></div>
 
     </section>
@@ -490,7 +505,9 @@
 
     <section class="card">
 
-      <div class="eyebrow">04 · Analisi AI</div>
+      <div class="eyebrow">
+        04 · Analisi AI
+      </div>
 
       <h2
         id="status"
@@ -501,35 +518,50 @@
 
       <div class="progress">
         <div
-          id="progressBar"
-          class="progress-bar"
+          id="bar"
+          class="bar"
         ></div>
       </div>
 
       <div class="stats">
 
         <div class="stat">
-          <span class="stat-label">Brand</span>
+          <span class="label">
+            Brand
+          </span>
+
           <strong
             id="brand"
-            class="stat-value"
-          >—</strong>
+            class="value"
+          >
+            —
+          </strong>
         </div>
 
         <div class="stat">
-          <span class="stat-label">Categoria</span>
+          <span class="label">
+            Categoria
+          </span>
+
           <strong
             id="category"
-            class="stat-value"
-          >—</strong>
+            class="value"
+          >
+            —
+          </strong>
         </div>
 
         <div class="stat">
-          <span class="stat-label">Condizione</span>
+          <span class="label">
+            Condizione
+          </span>
+
           <strong
             id="condition"
-            class="stat-value"
-          >—</strong>
+            class="value"
+          >
+            —
+          </strong>
         </div>
 
       </div>
@@ -541,7 +573,7 @@
 
     <section class="card full">
 
-      <div class="button-row">
+      <div class="buttons">
 
         <button
           class="btn"
@@ -551,7 +583,7 @@
         </button>
 
         <button
-          id="analyzeButton"
+          id="analyze"
           class="btn primary"
           disabled
           onclick="analyze()"
@@ -568,9 +600,13 @@
 
     <section class="card">
 
-      <div class="eyebrow">05 · Prezzo</div>
+      <div class="eyebrow">
+        05 · Prezzo
+      </div>
 
-      <h2 id="marketName">Vinted</h2>
+      <h2 id="marketName">
+        Vinted
+      </h2>
 
       <div
         id="price"
@@ -579,34 +615,49 @@
         —
       </div>
 
-      <div class="price-label">
+      <div style="color:#777;font-size:13px">
         Prezzo consigliato
       </div>
 
       <div class="stats">
 
         <div class="stat">
-          <span class="stat-label">⚡ Vendita rapida</span>
+          <span class="label">
+            ⚡ Vendita rapida
+          </span>
+
           <strong
-            id="quickPrice"
-            class="stat-value"
-          >—</strong>
+            id="quick"
+            class="value"
+          >
+            —
+          </strong>
         </div>
 
         <div class="stat">
-          <span class="stat-label">⭐ Confidenza AI</span>
+          <span class="label">
+            ⭐ Confidenza AI
+          </span>
+
           <strong
             id="confidence"
-            class="stat-value"
-          >—</strong>
+            class="value"
+          >
+            —
+          </strong>
         </div>
 
         <div class="stat">
-          <span class="stat-label">📅 Stima vendita</span>
+          <span class="label">
+            📅 Stima vendita
+          </span>
+
           <strong
-            id="estimatedDays"
-            class="stat-value"
-          >—</strong>
+            id="days"
+            class="value"
+          >
+            —
+          </strong>
         </div>
 
       </div>
@@ -618,19 +669,23 @@
 
     <section class="card">
 
-      <div class="eyebrow">06 · Listing</div>
+      <div class="eyebrow">
+        06 · Listing
+      </div>
 
-      <h2>✨ Annuncio pronto</h2>
+      <h2>
+        ✨ Annuncio pronto
+      </h2>
 
       <div
         id="listing"
         class="listing"
       >
         Carica le foto e premi
-        "Analizza e crea annuncio".
+        “Analizza e crea annuncio”.
       </div>
 
-      <div class="button-row">
+      <div class="buttons">
 
         <button
           class="btn primary"
@@ -639,25 +694,22 @@
           📋 Copia annuncio
         </button>
 
-        <button
-          class="btn"
-          onclick="improveImages()"
-        >
-          ✨ Migliora immagini
-        </button>
-
       </div>
 
     </section>
 
   </div>
 
+
   <div class="notice">
+
     💡 <strong>Consiglio:</strong>
-    usa foto del fronte, retro, etichetta, logo, dettagli e
-    eventuali difetti. Più informazioni fornisci, più accurata
-    sarà l'analisi.
+    inserisci fronte, retro, etichetta, logo,
+    dettagli e difetti. Più informazioni reali
+    fornisci, più utile sarà l'analisi.
+
   </div>
+
 
   <footer>
     ResellAI Studio · AI Reseller
@@ -668,646 +720,819 @@
 
 <script>
 
-const state = {
-  marketplace: "Vinted",
-  goal: "Equilibrato",
-  files: []
-};
+  /*
+   * STATO APP
+   */
+
+  const state = {
+
+    files: [],
+
+    marketplace: "Vinted",
+
+    goal: "Equilibrato"
+
+  };
 
 
-const marketplaces = [
-  "Vinted",
-  "eBay",
-  "Depop",
-  "Grailed",
-  "Vestiaire Collective"
-];
+  const marketplaces = [
+    "Vinted",
+    "eBay",
+    "Depop",
+    "Grailed",
+    "Vestiaire Collective"
+  ];
 
 
-const goals = [
-  "Veloce",
-  "Equilibrato",
-  "Profitto"
-];
+  const goals = [
+    "Veloce",
+    "Equilibrato",
+    "Profitto"
+  ];
 
 
-const fileInput =
-  document.getElementById("fileInput");
+  /*
+   * ELEMENTI
+   */
 
-const photoGrid =
-  document.getElementById("photoGrid");
+  const fileInput =
+    document.getElementById("fileInput");
 
-const photoCounter =
-  document.getElementById("photoCounter");
+  const photos =
+    document.getElementById("photos");
 
-const analyzeButton =
-  document.getElementById("analyzeButton");
+  const counter =
+    document.getElementById("counter");
 
-const status =
-  document.getElementById("status");
+  const analyzeButton =
+    document.getElementById("analyze");
 
-const progressBar =
-  document.getElementById("progressBar");
+  const status =
+    document.getElementById("status");
 
-const marketGrid =
-  document.getElementById("marketGrid");
+  const progressBar =
+    document.getElementById("bar");
 
-const goalRow =
-  document.getElementById("goalRow");
-
-const marketName =
-  document.getElementById("marketName");
-
-const brand =
-  document.getElementById("brand");
-
-const category =
-  document.getElementById("category");
-
-const condition =
-  document.getElementById("condition");
-
-const price =
-  document.getElementById("price");
-
-const quickPrice =
-  document.getElementById("quickPrice");
-
-const confidence =
-  document.getElementById("confidence");
-
-const estimatedDays =
-  document.getElementById("estimatedDays");
-
-const listing =
-  document.getElementById("listing");
-
-const userDescription =
-  document.getElementById("userDescription");
+  const userDescription =
+    document.getElementById("userDescription");
 
 
-/* MARKETPLACE */
+  /*
+   * MARKETPLACE
+   */
 
-function renderMarketplaces() {
+  function renderMarkets() {
 
-  marketGrid.innerHTML =
-    marketplaces.map(name => {
+    document.getElementById("markets").innerHTML =
+      marketplaces.map(market => {
 
-      const selected =
-        name === state.marketplace
-          ? "selected"
-          : "";
+        const selected =
+          market === state.marketplace
+            ? "selected"
+            : "";
 
-      return `
-        <div
-          class="market ${selected}"
-          onclick="selectMarketplace('${name}')"
-        >
-          <span>${name}</span>
-          <b>›</b>
-        </div>
-      `;
+        return `
+          <div
+            class="market ${selected}"
+            onclick="
+              state.marketplace='${market}';
+              renderMarkets();
+              document.getElementById('marketName').textContent=state.marketplace;
+            "
+          >
+            <span>
+              ${market}
+            </span>
 
-    }).join("");
+            <b>
+              ›
+            </b>
 
-  marketName.textContent =
-    state.marketplace;
-}
+          </div>
+        `;
 
+      }).join("");
 
-/* STRATEGIA */
-
-function renderGoals() {
-
-  goalRow.innerHTML =
-    goals.map(name => {
-
-      const selected =
-        name === state.goal
-          ? "primary"
-          : "";
-
-      return `
-        <button
-          class="btn ${selected}"
-          onclick="selectGoal('${name}')"
-        >
-          ${name}
-        </button>
-      `;
-
-    }).join("");
-}
-
-
-function selectMarketplace(name) {
-
-  state.marketplace = name;
-
-  renderMarketplaces();
-}
-
-
-function selectGoal(name) {
-
-  state.goal = name;
-
-  renderGoals();
-}
-
-
-/* SELEZIONE FOTO */
-
-fileInput.addEventListener(
-  "change",
-  handleFiles
-);
-
-
-function handleFiles(event) {
-
-  const files =
-    Array.from(event.target.files || []);
-
-  if (!files.length) {
-    return;
   }
 
-  const available =
-    8 - state.files.length;
 
-  if (available <= 0) {
+  /*
+   * STRATEGIA PREZZO
+   */
 
-    alert(
-      "Hai già raggiunto il limite di 8 foto."
-    );
+  function renderGoals() {
 
-    fileInput.value = "";
+    document.getElementById("goals").innerHTML =
+      goals.map(goal => {
 
-    return;
+        const selected =
+          goal === state.goal
+            ? "primary"
+            : "";
+
+        return `
+          <button
+            class="btn ${selected}"
+            onclick="
+              state.goal='${goal}';
+              renderGoals();
+            "
+          >
+            ${goal}
+          </button>
+        `;
+
+      }).join("");
+
   }
 
-  const selected =
-    files.slice(0, available);
 
-  state.files.push(...selected);
+  /*
+   * MOSTRA FOTO
+   */
 
-  if (files.length > available) {
+  function renderPhotos() {
 
-    alert(
-      "Puoi caricare massimo 8 foto."
-    );
-  }
+    photos.innerHTML = "";
 
-  fileInput.value = "";
+    state.files.forEach((file, index) => {
 
-  renderPhotos();
-}
+      const wrapper =
+        document.createElement("div");
+
+      wrapper.className = "photo";
 
 
-/* MINIATURE */
+      const img =
+        document.createElement("img");
 
-function renderPhotos() {
+      img.src =
+        URL.createObjectURL(file);
 
-  photoGrid.innerHTML = "";
+      img.alt =
+        "Foto " + (index + 1);
 
-  state.files.forEach((file, index) => {
 
-    const wrapper =
-      document.createElement("div");
+      const number =
+        document.createElement("div");
 
-    wrapper.className = "photo";
+      number.className =
+        "photo-number";
 
-    const image =
-      document.createElement("img");
+      number.textContent =
+        index + 1;
 
-    image.alt =
-      "Foto articolo " + (index + 1);
 
-    image.src =
-      URL.createObjectURL(file);
+      const remove =
+        document.createElement("button");
 
-    const number =
-      document.createElement("div");
+      remove.className =
+        "remove-photo";
 
-    number.className =
-      "photo-number";
+      remove.type =
+        "button";
 
-    number.textContent =
-      index + 1;
+      remove.textContent =
+        "×";
 
-    const remove =
-      document.createElement("button");
 
-    remove.type = "button";
+      remove.onclick = () => {
 
-    remove.className =
-      "remove-photo";
+        state.files.splice(index, 1);
 
-    remove.textContent =
-      "×";
+        renderPhotos();
 
-    remove.onclick =
-      function() {
-        removePhoto(index);
       };
 
-    wrapper.appendChild(image);
-    wrapper.appendChild(number);
-    wrapper.appendChild(remove);
 
-    photoGrid.appendChild(wrapper);
+      wrapper.appendChild(img);
 
-  });
+      wrapper.appendChild(number);
 
-  photoCounter.textContent =
-    state.files.length + " / 8 foto";
+      wrapper.appendChild(remove);
 
-  analyzeButton.disabled =
-    state.files.length === 0;
+      photos.appendChild(wrapper);
 
-  if (state.files.length > 0) {
+    });
 
-    status.textContent =
-      state.files.length +
-      " foto pronte per l'analisi";
 
-  } else {
+    counter.textContent =
+      state.files.length + " / 8 foto";
 
-    status.textContent =
-      "In attesa delle foto";
+
+    analyzeButton.disabled =
+      state.files.length === 0;
+
+
+    if (state.files.length === 0) {
+
+      status.textContent =
+        "In attesa delle foto";
+
+    } else {
+
+      status.textContent =
+        state.files.length +
+        " foto pronte per l'analisi";
+
+    }
+
   }
-}
 
 
-function removePhoto(index) {
+  /*
+   * SELEZIONE FOTO
+   */
 
-  state.files.splice(index, 1);
+  fileInput.addEventListener(
+    "change",
+    event => {
 
-  renderPhotos();
-}
+      const selectedFiles =
+        Array.from(event.target.files);
+
+      const available =
+        8 - state.files.length;
 
 
-/*
-  RIDIMENSIONAMENTO E COMPRESSIONE
-
-  Convertiamo qualsiasi foto in JPEG.
-  Questo evita problemi con PNG/WEBP e
-  riduce enormemente la dimensione della richiesta.
-*/
-
-function fileToDataURL(file) {
-
-  return new Promise((resolve, reject) => {
-
-    const reader =
-      new FileReader();
-
-    reader.onload = function() {
-
-      const image =
-        new Image();
-
-      image.onload = function() {
-
-        const MAX_SIZE = 1400;
-
-        let width =
-          image.naturalWidth;
-
-        let height =
-          image.naturalHeight;
-
-        if (!width || !height) {
-
-          reject(
-            new Error(
-              "Dimensioni immagine non valide."
-            )
-          );
-
-          return;
-        }
-
-        if (width > MAX_SIZE || height > MAX_SIZE) {
-
-          if (width > height) {
-
-            height =
-              Math.round(
-                height * MAX_SIZE / width
-              );
-
-            width =
-              MAX_SIZE;
-
-          } else {
-
-            width =
-              Math.round(
-                width * MAX_SIZE / height
-              );
-
-            height =
-              MAX_SIZE;
-          }
-        }
-
-        const canvas =
-          document.createElement("canvas");
-
-        canvas.width =
-          width;
-
-        canvas.height =
-          height;
-
-        const context =
-          canvas.getContext("2d");
-
-        if (!context) {
-
-          reject(
-            new Error(
-              "Impossibile elaborare l'immagine."
-            )
-          );
-
-          return;
-        }
-
-        context.drawImage(
-          image,
+      state.files.push(
+        ...selectedFiles.slice(
           0,
-          0,
-          width,
-          height
+          available
+        )
+      );
+
+
+      if (selectedFiles.length > available) {
+
+        alert(
+          "Puoi caricare massimo 8 foto."
         );
 
-        const result =
-          canvas.toDataURL(
-            "image/jpeg",
-            0.78
-          );
+      }
 
-        if (
-          typeof result !== "string" ||
-          !result.startsWith("data:image/jpeg;base64,")
-        ) {
+
+      /*
+       * Permette di selezionare
+       * nuovamente le stesse foto.
+       */
+
+      fileInput.value = "";
+
+
+      renderPhotos();
+
+    }
+  );
+
+
+  /*
+   * ==================================================
+   * COMPRESSIONE IMMAGINI
+   * ==================================================
+   *
+   * QUESTA È LA PARTE CORRETTA.
+   *
+   * Ogni immagine viene:
+   *
+   * 1. Ridimensionata a massimo 800 px.
+   * 2. Convertita in JPEG.
+   * 3. Compressa progressivamente.
+   * 4. Portata idealmente sotto 220 KB.
+   *
+   * In questo modo 8 foto pesano
+   * molto meno della versione precedente.
+   *
+   */
+
+  function compressImage(file) {
+
+    return new Promise(
+      (resolve, reject) => {
+
+        const reader =
+          new FileReader();
+
+
+        reader.onerror = () => {
 
           reject(
             new Error(
-              "Formato immagine non valido."
-            )
-          );
-
-          return;
-        }
-
-        resolve(result);
-
-      };
-
-      image.onerror =
-        function() {
-
-          reject(
-            new Error(
-              "Impossibile leggere una delle foto."
+              "Impossibile leggere la foto."
             )
           );
 
         };
 
-      image.src =
-        reader.result;
-    };
 
-    reader.onerror =
-      function() {
+        reader.onload = () => {
 
-        reject(
-          new Error(
-            "Impossibile leggere il file."
-          )
-        );
-
-      };
-
-    reader.readAsDataURL(file);
-  });
-}
+          const image =
+            new Image();
 
 
-/* ANALISI */
+          image.onerror = () => {
 
-async function analyze() {
+            reject(
+              new Error(
+                "Impossibile leggere una delle immagini."
+              )
+            );
 
-  if (!state.files.length) {
+          };
 
-    alert(
-      "📸 Carica almeno una foto."
+
+          image.onload = () => {
+
+            /*
+             * MASSIMA DIMENSIONE:
+             * 800 px
+             */
+
+            const MAX_SIZE = 800;
+
+
+            let width =
+              image.naturalWidth;
+
+            let height =
+              image.naturalHeight;
+
+
+            if (
+              width > MAX_SIZE ||
+              height > MAX_SIZE
+            ) {
+
+              if (width >= height) {
+
+                height =
+                  Math.round(
+                    height *
+                    MAX_SIZE /
+                    width
+                  );
+
+                width =
+                  MAX_SIZE;
+
+              } else {
+
+                width =
+                  Math.round(
+                    width *
+                    MAX_SIZE /
+                    height
+                  );
+
+                height =
+                  MAX_SIZE;
+
+              }
+
+            }
+
+
+            const canvas =
+              document.createElement(
+                "canvas"
+              );
+
+
+            canvas.width =
+              width;
+
+            canvas.height =
+              height;
+
+
+            const context =
+              canvas.getContext(
+                "2d"
+              );
+
+
+            if (!context) {
+
+              reject(
+                new Error(
+                  "Impossibile elaborare l'immagine."
+                )
+              );
+
+              return;
+
+            }
+
+
+            context.drawImage(
+              image,
+              0,
+              0,
+              width,
+              height
+            );
+
+
+            /*
+             * Compressione progressiva.
+             */
+
+            let quality = 0.65;
+
+            let result = "";
+
+
+            do {
+
+              result =
+                canvas.toDataURL(
+                  "image/jpeg",
+                  quality
+                );
+
+
+              quality -= 0.05;
+
+
+            } while (
+
+              result.length > 220000 &&
+              quality >= 0.35
+
+            );
+
+
+            if (
+              !result ||
+              !result.startsWith(
+                "data:image/jpeg;base64,"
+              )
+            ) {
+
+              reject(
+                new Error(
+                  "Impossibile creare la versione compressa della foto."
+                )
+              );
+
+              return;
+
+            }
+
+
+            resolve(result);
+
+          };
+
+
+          image.src =
+            reader.result;
+
+        };
+
+
+        reader.readAsDataURL(file);
+
+      }
     );
 
-    return;
   }
 
-  analyzeButton.disabled =
-    true;
 
-  status.textContent =
-    "⏳ Preparazione delle foto...";
+  /*
+   * ERRORE LEGGIBILE
+   */
 
-  progressBar.style.width =
-    "10%";
+  function readableError(error) {
 
-  try {
+    if (!error) {
 
-    const images = [];
+      return "Errore sconosciuto.";
 
-    for (
-      let i = 0;
-      i < state.files.length;
-      i++
-    ) {
-
-      status.textContent =
-        "🖼️ Preparazione foto " +
-        (i + 1) +
-        " di " +
-        state.files.length +
-        "...";
-
-      const image =
-        await fileToDataURL(
-          state.files[i]
-        );
-
-      images.push(image);
-
-      progressBar.style.width =
-        (
-          10 +
-          ((i + 1) /
-            state.files.length) *
-          30
-        ) + "%";
     }
 
 
-    status.textContent =
-      "🤖 Gemini sta analizzando le foto...";
+    if (
+      typeof error === "string"
+    ) {
 
-    progressBar.style.width =
-      "50%";
+      return error;
 
-
-    const payload = {
-      images: images,
-
-      userDescription:
-        userDescription.value.trim(),
-
-      marketplace:
-        state.marketplace,
-
-      goal:
-        state.goal
-    };
+    }
 
 
-    const response =
-      await fetch(
-        "/api/analyze",
-        {
-          method: "POST",
+    if (
+      error.message
+    ) {
 
-          headers: {
-            "Content-Type":
-              "application/json",
-            "Accept":
-              "application/json"
-          },
+      return error.message;
 
-          body:
-            JSON.stringify(payload)
-        }
-      );
+    }
 
-
-    const responseText =
-      await response.text();
-
-
-    let data;
 
     try {
 
-      data =
-        responseText
-          ? JSON.parse(responseText)
-          : {};
-
-    } catch (parseError) {
-
-      console.error(
-        "Risposta non JSON:",
-        responseText
+      return JSON.stringify(
+        error,
+        null,
+        2
       );
 
-      throw new Error(
-        "Il server ha restituito una risposta non valida."
+    } catch {
+
+      return "Errore durante l'analisi.";
+
+    }
+
+  }
+
+
+  /*
+   * ANALISI
+   */
+
+  async function analyze() {
+
+    if (
+      state.files.length === 0
+    ) {
+
+      alert(
+        "📸 Carica almeno una foto."
       );
+
+      return;
+
     }
 
 
-    if (!response.ok) {
-
-      throw new Error(
-        data.error ||
-        "Errore API: " +
-        response.status
-      );
-    }
+    analyzeButton.disabled =
+      true;
 
 
     progressBar.style.width =
-      "80%";
+      "5%";
 
 
-    /* DATI */
+    try {
 
-    brand.textContent =
-      data.brand ||
-      "Non identificato";
-
-    category.textContent =
-      data.category ||
-      "Non identificata";
-
-    condition.textContent =
-      data.condition ||
-      "Non identificata";
+      const images = [];
 
 
-    /* PREZZO */
+      /*
+       * COMPRESSIONE UNA FOTO ALLA VOLTA
+       */
 
-    const recommendedPrice =
-      state.goal === "Veloce"
-        ? data.quick_sale_price_eur
-        : data.estimated_price_eur;
+      for (
+        let i = 0;
+        i < state.files.length;
+        i++
+      ) {
+
+        status.textContent =
+          `🖼️ Compressione foto ${i + 1} di ${state.files.length}…`;
 
 
-    price.textContent =
-      "€ " +
-      (
-        Number(recommendedPrice) || 0
+        const compressed =
+          await compressImage(
+            state.files[i]
+          );
+
+
+        images.push(
+          compressed
+        );
+
+
+        progressBar.style.width =
+          (
+            10 +
+            ((i + 1) /
+              state.files.length) *
+            35
+          ) + "%";
+
+      }
+
+
+      /*
+       * CONTROLLO DIMENSIONE
+       */
+
+      const totalSize =
+        images.reduce(
+          (total, image) =>
+            total + image.length,
+          0
+        );
+
+
+      console.log(
+        "Dimensione totale immagini:",
+        Math.round(
+          totalSize / 1024
+        ),
+        "KB"
       );
 
 
-    quickPrice.textContent =
-      "€ " +
-      (
+      status.textContent =
+        `🤖 Analizzo ${state.files.length} foto…`;
+
+
+      /*
+       * INVIO AL BACKEND
+       */
+
+      const response =
+        await fetch(
+          "/api/analyze",
+          {
+
+            method: "POST",
+
+            headers: {
+
+              "Content-Type":
+                "application/json",
+
+              "Accept":
+                "application/json"
+
+            },
+
+            body:
+              JSON.stringify({
+
+                images,
+
+                userDescription:
+                  userDescription.value.trim(),
+
+                marketplace:
+                  state.marketplace,
+
+                goal:
+                  state.goal
+
+              })
+
+          }
+        );
+
+
+      /*
+       * LEGGIAMO PRIMA IL TESTO
+       */
+
+      const raw =
+        await response.text();
+
+
+      let data = {};
+
+
+      try {
+
+        data =
+          raw
+            ? JSON.parse(raw)
+            : {};
+
+      } catch {
+
+        throw new Error(
+          "Il server ha restituito una risposta non valida."
+        );
+
+      }
+
+
+      /*
+       * ERRORE SERVER
+       */
+
+      if (!response.ok) {
+
+        throw new Error(
+
+          data.error ||
+
+          `Errore server ${response.status}. ` +
+
+          `Dimensione immagini: ` +
+
+          `${Math.round(
+            totalSize / 1024
+          )} KB`
+
+        );
+
+      }
+
+
+      /*
+       * RISULTATI
+       */
+
+      document.getElementById(
+        "brand"
+      ).textContent =
+        data.brand ||
+        "Non identificato";
+
+
+      document.getElementById(
+        "category"
+      ).textContent =
+        data.category ||
+        "Non identificata";
+
+
+      document.getElementById(
+        "condition"
+      ).textContent =
+        data.condition ||
+        "Non identificata";
+
+
+      const price =
+        state.goal === "Veloce"
+
+          ? data.quick_sale_price_eur
+
+          : data.estimated_price_eur;
+
+
+      document.getElementById(
+        "price"
+      ).textContent =
+        "€ " +
+        (Number(price) || 0);
+
+
+      document.getElementById(
+        "quick"
+      ).textContent =
+        "€ " +
+        (
+          Number(
+            data.quick_sale_price_eur
+          ) || 0
+        );
+
+
+      const confidence =
         Number(
-          data.quick_sale_price_eur
-        ) || 0
-      );
+          data.confidence
+        );
 
 
-    /* CONFIDENZA */
+      document.getElementById(
+        "confidence"
+      ).textContent =
+        Number.isFinite(
+          confidence
+        )
 
-    const confidenceValue =
-      Number(data.confidence);
+          ? Math.round(
+              confidence * 100
+            ) + "%"
 
-    confidence.textContent =
-      Number.isFinite(
-        confidenceValue
-      )
-        ? Math.round(
-            confidenceValue * 100
-          ) + "%"
-        : "—";
-
-
-    /* TEMPO */
-
-    estimatedDays.textContent =
-      data.estimated_days ||
-      "—";
+          : "—";
 
 
-    /* HASHTAG */
+      document.getElementById(
+        "days"
+      ).textContent =
+        data.estimated_days ||
+        "—";
 
-    const hashtags =
-      Array.isArray(data.hashtags)
-        ? data.hashtags.join(" ")
-        : "";
+
+      /*
+       * HASHTAG
+       */
+
+      const hashtags =
+        Array.isArray(
+          data.hashtags
+        )
+
+          ? data.hashtags.join(" ")
+
+          : "";
 
 
-    /* ANNUNCIO */
+      /*
+       * ANNUNCIO
+       */
 
-    listing.textContent =
-`🏷️ TITOLO
+      document.getElementById(
+        "listing"
+      ).textContent =
+
+        `🏷️ TITOLO
 
 ${data.title || "Titolo non disponibile"}
 
@@ -1320,21 +1545,30 @@ ${data.description || "Descrizione non disponibile"}
 📦 DETTAGLI
 
 Brand: ${data.brand || "Non identificato"}
+
 Modello: ${data.model || "Non identificato"}
+
 Categoria: ${data.category || "Non identificata"}
+
 Colore: ${data.color || "Non identificato"}
+
 Taglia: ${data.size || "Non identificata"}
+
 Condizione: ${data.condition || "Non identificata"}
 
 
 💶 PREZZO CONSIGLIATO
 
-€ ${Number(recommendedPrice) || 0}
+€ ${Number(price) || 0}
 
 
 ⚡ PREZZO VENDITA RAPIDA
 
-€ ${Number(data.quick_sale_price_eur) || 0}
+€ ${
+  Number(
+    data.quick_sale_price_eur
+  ) || 0
+}
 
 
 #️⃣ HASHTAG
@@ -1342,134 +1576,160 @@ Condizione: ${data.condition || "Non identificata"}
 ${hashtags}`;
 
 
-    progressBar.style.width =
-      "100%";
-
-    status.textContent =
-      "✨ Analisi completata!";
+      progressBar.style.width =
+        "100%";
 
 
-  } catch (error) {
+      status.textContent =
+        "✨ Analisi completata!";
 
-    console.error(
-      "ResellAI error:",
-      error
+
+    } catch (error) {
+
+      console.error(
+        "Errore analisi:",
+        error
+      );
+
+
+      progressBar.style.width =
+        "0%";
+
+
+      status.textContent =
+        "❌ Analisi non riuscita";
+
+
+      /*
+       * IMPORTANTISSIMO:
+       * niente più [object Object].
+       */
+
+      alert(
+        readableError(error)
+      );
+
+
+    } finally {
+
+      analyzeButton.disabled =
+        state.files.length === 0;
+
+    }
+
+  }
+
+
+  /*
+   * COPIA ANNUNCIO
+   */
+
+  async function copyListing() {
+
+    const text =
+      document.getElementById(
+        "listing"
+      ).textContent.trim();
+
+
+    if (
+      !text ||
+      text.startsWith(
+        "Carica le foto"
+      )
+    ) {
+
+      alert(
+        "Prima crea un annuncio."
+      );
+
+      return;
+
+    }
+
+
+    try {
+
+      await navigator.clipboard.writeText(
+        text
+      );
+
+      alert(
+        "📋 Annuncio copiato!"
+      );
+
+    } catch {
+
+      alert(
+        "Copia non disponibile. " +
+        "Seleziona il testo dell'annuncio e copialo."
+      );
+
+    }
+
+  }
+
+
+  /*
+   * RESET
+   */
+
+  function resetAll() {
+
+    state.files = [];
+
+    fileInput.value = "";
+
+    userDescription.value = "";
+
+
+    renderPhotos();
+
+
+    [
+      "brand",
+      "category",
+      "condition",
+      "price",
+      "quick",
+      "confidence",
+      "days"
+    ].forEach(
+      id => {
+
+        document.getElementById(
+          id
+        ).textContent = "—";
+
+      }
     );
+
 
     progressBar.style.width =
       "0%";
 
+
     status.textContent =
-      "❌ Errore durante l'analisi";
-
-    alert(
-      error && error.message
-        ? error.message
-        : "Errore durante l'analisi."
-    );
-
-  } finally {
-
-    analyzeButton.disabled =
-      state.files.length === 0;
-  }
-}
+      "In attesa delle foto";
 
 
-/* COPIA */
+    document.getElementById(
+      "listing"
+    ).textContent =
+      "Carica le foto e premi “Analizza e crea annuncio”.";
 
-async function copyListing() {
-
-  const text =
-    listing.textContent.trim();
-
-  if (
-    !text ||
-    text.startsWith(
-      "Carica le foto"
-    )
-  ) {
-
-    alert(
-      "Prima crea un annuncio."
-    );
-
-    return;
   }
 
-  try {
 
-    await navigator.clipboard.writeText(
-      text
-    );
+  /*
+   * AVVIO
+   */
 
-    alert(
-      "📋 Annuncio copiato!"
-    );
+  renderMarkets();
 
-  } catch {
-
-    alert(
-      "Non è stato possibile copiare automaticamente il testo."
-    );
-  }
-}
-
-
-/* RESET */
-
-function resetAll() {
-
-  state.files = [];
-
-  fileInput.value = "";
-
-  userDescription.value = "";
+  renderGoals();
 
   renderPhotos();
-
-  brand.textContent = "—";
-
-  category.textContent = "—";
-
-  condition.textContent = "—";
-
-  price.textContent = "—";
-
-  quickPrice.textContent = "—";
-
-  confidence.textContent = "—";
-
-  estimatedDays.textContent = "—";
-
-  progressBar.style.width =
-    "0%";
-
-  status.textContent =
-    "In attesa delle foto";
-
-  listing.textContent =
-    'Carica le foto e premi "Analizza e crea annuncio".';
-}
-
-
-/* FUNZIONE PROVVISORIA */
-
-function improveImages() {
-
-  alert(
-    "✨ L'ottimizzazione professionale delle immagini verrà collegata nel prossimo aggiornamento."
-  );
-}
-
-
-/* AVVIO */
-
-renderMarketplaces();
-
-renderGoals();
-
-renderPhotos();
 
 </script>
 
