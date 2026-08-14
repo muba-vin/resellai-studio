@@ -1,3 +1,4 @@
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
@@ -13,42 +14,80 @@ export default async function handler(req, res) {
     }
 
     const {
-      image,
+      images,
+      userDescription = "",
       marketplace = "Vinted",
       goal = "Equilibrato"
     } = req.body || {};
 
-    if (!image || typeof image !== "string") {
+    if (!Array.isArray(images) || images.length === 0) {
       return res.status(400).json({
-        error: "Immagine mancante o non valida."
+        error: "Nessuna foto ricevuta."
       });
     }
 
-    const match = image.match(
-      /^data:(image\/(?:jpeg|jpg|png|webp));base64,([A-Za-z0-9+/=]+)$/
-    );
-
-    if (!match) {
+    if (images.length > 8) {
       return res.status(400).json({
-        error: "Formato immagine non valido. Usa JPG, PNG o WEBP."
+        error: "Puoi caricare massimo 8 foto."
       });
     }
 
-    const mimeType = match[1];
-    const base64Data = match[2];
+    const imageParts = [];
+
+    for (const image of images) {
+      if (typeof image !== "string") continue;
+
+      const match = image.match(
+        /^data:(image\/(?:jpeg|jpg|png|webp));base64,([A-Za-z0-9+/=]+)$/
+      );
+
+      if (!match) {
+        return res.status(400).json({
+          error: "Una delle immagini non è in un formato valido. Usa JPG, PNG o WEBP."
+        });
+      }
+
+      imageParts.push({
+        type: "image",
+        data: match[2],
+        mime_type: match[1]
+      });
+    }
+
+    if (imageParts.length === 0) {
+      return res.status(400).json({
+        error: "Nessuna immagine valida ricevuta."
+      });
+    }
 
     const prompt = `
-Sei un esperto di reselling di moda e streetwear.
+Sei un esperto professionista di reselling e copywriting per marketplace di seconda mano.
 
-Analizza attentamente la foto dell'articolo.
+Devi analizzare TUTTE le foto dell'articolo insieme e creare un annuncio ottimizzato per la vendita.
 
-Non inventare informazioni che non sono visibili.
-Se un'informazione non può essere determinata dalla foto, usa "Non identificato".
+Marketplace principale: ${marketplace}
+Strategia prezzo: ${goal}
 
-Restituisci un JSON conforme esattamente allo schema richiesto.
+Informazioni aggiuntive fornite dal venditore:
+${userDescription || "Nessuna informazione aggiuntiva fornita."}
 
-Marketplace: ${marketplace}
-Strategia: ${goal}
+Usa sia ciò che vedi nelle fotografie sia le informazioni fornite dal venditore.
+
+IMPORTANTE:
+- Non inventare caratteristiche che non puoi verificare.
+- Se una caratteristica non è visibile e non è stata indicata dal venditore, usa "Non identificato".
+- Se sono visibili difetti, macchie, usura o imperfezioni, indicane la presenza in modo trasparente.
+- Non dichiarare autenticità se non può essere verificata.
+- Non inventare taglia, materiale, modello o colore.
+- La descrizione deve essere piacevole, naturale e orientata alla vendita.
+- Usa alcune emoji pertinenti, ma senza esagerare.
+- Il testo deve sembrare scritto da un venditore reale, non da un robot.
+- Per Vinted privilegia un titolo chiaro, ricercabile e breve.
+- Evita keyword stuffing.
+- Inserisci nella descrizione le informazioni realmente utili all'acquirente.
+- Se il venditore ha fornito informazioni importanti, integrale naturalmente nel testo.
+- I prezzi devono essere prudenti e indicativi del mercato dell'usato europeo.
+- La stima dei giorni di vendita deve essere realistica.
 `;
 
     const response = await fetch(
@@ -68,11 +107,7 @@ Strategia: ${goal}
               type: "text",
               text: prompt
             },
-            {
-              type: "image",
-              data: base64Data,
-              mime_type: mimeType
-            }
+            ...imageParts
           ],
 
           response_format: {
@@ -151,7 +186,7 @@ Strategia: ${goal}
 
     try {
       result = JSON.parse(text);
-    } catch (error) {
+    } catch {
       console.error("Invalid JSON from Gemini:", text);
 
       return res.status(500).json({
