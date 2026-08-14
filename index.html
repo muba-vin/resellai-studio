@@ -1,760 +1,667 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#111111">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#111111">
+  <title>ResellAI Studio</title>
 
-<title>ResellAI Studio</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-<style>
+    body {
+      margin: 0;
+      background: #f4f4f1;
+      color: #111;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    }
 
-*{
-  box-sizing:border-box;
-}
+    .container {
+      width: min(1050px, calc(100% - 28px));
+      margin: auto;
+    }
 
-body{
-  margin:0;
-  background:#f4f4f1;
-  color:#111;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
-}
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 0;
+    }
 
-.container{
-  width:min(1050px,calc(100% - 32px));
-  margin:auto;
-}
+    .logo {
+      font-size: 21px;
+      font-weight: 900;
+      letter-spacing: -.04em;
+    }
 
-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:20px 0;
-}
+    .badge {
+      background: #111;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 99px;
+      font-size: 11px;
+      font-weight: 800;
+    }
 
-.logo{
-  font-size:21px;
-  font-weight:900;
-  letter-spacing:-.04em;
-}
+    .hero {
+      padding: 35px 0 25px;
+    }
 
-.badge{
-  background:#111;
-  color:white;
-  padding:8px 12px;
-  border-radius:99px;
-  font-size:12px;
-  font-weight:700;
-}
+    .eyebrow {
+      color: #777;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+    }
 
-.hero{
-  padding:42px 0 30px;
-}
+    .hero h1 {
+      font-size: clamp(43px, 8vw, 76px);
+      line-height: .92;
+      letter-spacing: -.065em;
+      margin: 10px 0 15px;
+      max-width: 850px;
+    }
 
-.eyebrow{
-  color:#777;
-  font-size:12px;
-  font-weight:800;
-  text-transform:uppercase;
-  letter-spacing:.12em;
-}
+    .hero p {
+      color: #777;
+      font-size: 16px;
+      max-width: 700px;
+      line-height: 1.5;
+    }
 
-.hero h1{
-  font-size:clamp(44px,8vw,78px);
-  line-height:.9;
-  letter-spacing:-.065em;
-  margin:12px 0;
-  max-width:850px;
-}
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      padding-bottom: 30px;
+    }
 
-.hero p{
-  color:#777;
-  font-size:17px;
-  max-width:700px;
-}
+    .card {
+      background: #fff;
+      border: 1px solid #e4e4e0;
+      border-radius: 21px;
+      padding: 20px;
+      box-shadow: 0 8px 35px rgba(0,0,0,.035);
+    }
 
-.grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:15px;
-  padding-bottom:40px;
-}
+    .full {
+      grid-column: 1 / -1;
+    }
 
-.card{
-  background:white;
-  border:1px solid #e5e5e1;
-  border-radius:22px;
-  padding:20px;
-  box-shadow:0 10px 40px rgba(0,0,0,.035);
-}
+    h2 {
+      margin: 8px 0 17px;
+      letter-spacing: -.025em;
+    }
 
-.full{
-  grid-column:1 / -1;
-}
+    h3 {
+      margin-top: 24px;
+    }
 
-.card h2{
-  margin:8px 0 18px;
-  letter-spacing:-.025em;
-}
+    .upload {
+      display: block;
+      border: 2px dashed #ccc;
+      border-radius: 18px;
+      padding: 30px 15px;
+      text-align: center;
+      background: #fafaf8;
+      cursor: pointer;
+      transition: .2s;
+    }
 
-.upload{
-  display:block;
-  border:2px dashed #ccc;
-  border-radius:18px;
-  padding:30px 18px;
-  text-align:center;
-  background:#fafaf8;
-  cursor:pointer;
-  transition:.2s;
-}
+    .upload:hover {
+      border-color: #111;
+      background: #f7f7f5;
+    }
 
-.upload:hover{
-  border-color:#111;
-  background:#f5f5f3;
-}
+    .upload input {
+      display: none;
+    }
 
-.upload input{
-  display:none;
-}
+    .upload-title {
+      display: block;
+      font-weight: 850;
+      font-size: 17px;
+    }
 
-.upload-title{
-  display:block;
-  font-weight:850;
-  font-size:17px;
-}
+    .upload-subtitle {
+      display: block;
+      color: #777;
+      font-size: 13px;
+      margin-top: 7px;
+    }
 
-.upload-subtitle{
-  display:block;
-  color:#777;
-  margin-top:6px;
-  font-size:13px;
-}
+    .photo-counter {
+      margin-top: 12px;
+      color: #777;
+      font-size: 13px;
+    }
 
-.photo-counter{
-  margin-top:12px;
-  font-size:13px;
-  color:#777;
-}
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 9px;
+      margin-top: 13px;
+    }
 
-.photo-grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:9px;
-  margin-top:14px;
-}
+    .photo {
+      position: relative;
+    }
 
-.photo{
-  position:relative;
-}
+    .photo img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border-radius: 13px;
+      background: #eee;
+    }
 
-.photo img{
-  width:100%;
-  aspect-ratio:1;
-  object-fit:cover;
-  border-radius:13px;
-  display:block;
-  background:#eee;
-}
+    .photo-number {
+      position: absolute;
+      left: 6px;
+      top: 6px;
+      width: 25px;
+      height: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: #111;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 800;
+    }
 
-.photo-number{
-  position:absolute;
-  left:6px;
-  top:6px;
-  background:#111;
-  color:#fff;
-  width:25px;
-  height:25px;
-  border-radius:50%;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  font-size:11px;
-  font-weight:800;
-}
+    .remove-photo {
+      position: absolute;
+      right: 6px;
+      top: 6px;
+      width: 27px;
+      height: 27px;
+      border: 0;
+      border-radius: 50%;
+      background: #fff;
+      cursor: pointer;
+      font-size: 18px;
+      line-height: 1;
+      box-shadow: 0 2px 10px rgba(0,0,0,.2);
+    }
 
-.remove{
-  position:absolute;
-  right:6px;
-  top:6px;
-  width:27px;
-  height:27px;
-  border:0;
-  border-radius:50%;
-  background:#fff;
-  color:#111;
-  cursor:pointer;
-  font-size:18px;
-  line-height:1;
-  box-shadow:0 2px 10px rgba(0,0,0,.2);
-}
+    textarea {
+      width: 100%;
+      min-height: 120px;
+      padding: 14px;
+      border: 1px solid #ddd;
+      border-radius: 14px;
+      font: inherit;
+      resize: vertical;
+      outline: none;
+    }
 
-textarea{
-  width:100%;
-  min-height:125px;
-  padding:15px;
-  border:1px solid #ddd;
-  border-radius:14px;
-  font:inherit;
-  resize:vertical;
-  outline:none;
-}
+    textarea:focus {
+      border-color: #111;
+    }
 
-textarea:focus{
-  border-color:#111;
-}
+    .helper {
+      color: #888;
+      font-size: 12px;
+      line-height: 1.5;
+      margin-top: 8px;
+    }
 
-.helper{
-  color:#888;
-  font-size:12px;
-  margin-top:8px;
-  line-height:1.5;
-}
+    .market-grid {
+      display: grid;
+      gap: 8px;
+    }
 
-.market-grid{
-  display:grid;
-  gap:8px;
-}
+    .market {
+      padding: 13px;
+      border: 1px solid #e2e2de;
+      border-radius: 13px;
+      display: flex;
+      justify-content: space-between;
+      cursor: pointer;
+    }
 
-.market{
-  border:1px solid #e2e2de;
-  border-radius:13px;
-  padding:13px;
-  display:flex;
-  justify-content:space-between;
-  cursor:pointer;
-  transition:.15s;
-}
+    .market.selected {
+      border: 2px solid #111;
+      background: #f7f7f5;
+    }
 
-.market.selected{
-  border:2px solid #111;
-  background:#f7f7f5;
-}
+    .goal-row,
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
 
-.goal-row{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  margin-top:10px;
-}
+    .goal-row {
+      margin-top: 10px;
+    }
 
-button{
-  font:inherit;
-}
+    .button-row {
+      margin-top: 12px;
+    }
 
-.btn{
-  border:1px solid #ddd;
-  background:#fff;
-  color:#111;
-  border-radius:12px;
-  padding:11px 14px;
-  font-weight:750;
-  cursor:pointer;
-  transition:.15s;
-}
+    .btn {
+      border: 1px solid #ddd;
+      background: #fff;
+      color: #111;
+      border-radius: 12px;
+      padding: 11px 14px;
+      font-weight: 750;
+      cursor: pointer;
+    }
 
-.btn:hover{
-  transform:translateY(-1px);
-}
+    .btn.primary {
+      background: #111;
+      color: #fff;
+      border-color: #111;
+    }
 
-.btn.primary{
-  background:#111;
-  border-color:#111;
-  color:#fff;
-}
+    .btn:disabled {
+      opacity: .4;
+      cursor: not-allowed;
+    }
 
-.btn:disabled{
-  opacity:.4;
-  cursor:not-allowed;
-  transform:none;
-}
+    .status {
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
 
-.analysis-status{
-  font-weight:800;
-  margin-bottom:12px;
-}
+    .progress {
+      width: 100%;
+      height: 8px;
+      border-radius: 99px;
+      overflow: hidden;
+      background: #e9e9e6;
+    }
 
-.progress{
-  width:100%;
-  height:8px;
-  background:#e9e9e6;
-  border-radius:99px;
-  overflow:hidden;
-}
+    .progress-bar {
+      width: 0;
+      height: 100%;
+      background: #111;
+      transition: width .4s;
+    }
 
-.progress-bar{
-  width:0;
-  height:100%;
-  background:#111;
-  transition:width .4s;
-}
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 9px;
+      margin-top: 14px;
+    }
 
-.stats{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:9px;
-  margin-top:14px;
-}
+    .stat {
+      padding: 13px;
+      border-radius: 14px;
+      background: #f6f6f3;
+    }
 
-.stat{
-  background:#f6f6f3;
-  border-radius:14px;
-  padding:13px;
-}
+    .stat-label {
+      display: block;
+      color: #777;
+      font-size: 11px;
+    }
 
-.stat-label{
-  display:block;
-  color:#777;
-  font-size:11px;
-}
+    .stat-value {
+      display: block;
+      margin-top: 5px;
+      font-size: 17px;
+      font-weight: 850;
+    }
 
-.stat-value{
-  display:block;
-  margin-top:5px;
-  font-size:17px;
-  font-weight:850;
-}
+    .price {
+      font-size: 52px;
+      line-height: 1;
+      font-weight: 950;
+      letter-spacing: -.06em;
+      margin: 10px 0 5px;
+    }
 
-.price{
-  font-size:54px;
-  line-height:1;
-  font-weight:950;
-  letter-spacing:-.06em;
-  margin:10px 0 5px;
-}
+    .price-label {
+      color: #777;
+      font-size: 13px;
+    }
 
-.price-label{
-  color:#777;
-  font-size:13px;
-}
+    .listing {
+      min-height: 250px;
+      padding: 18px;
+      background: #f6f6f3;
+      border-radius: 16px;
+      white-space: pre-wrap;
+      line-height: 1.55;
+    }
 
-.listing{
-  background:#f6f6f3;
-  border-radius:16px;
-  padding:18px;
-  white-space:pre-wrap;
-  line-height:1.55;
-  min-height:240px;
-}
+    .notice {
+      padding: 13px;
+      border-radius: 13px;
+      background: #f6f6f3;
+      color: #666;
+      font-size: 13px;
+      line-height: 1.5;
+      margin-bottom: 25px;
+    }
 
-.button-row{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-  margin-top:12px;
-}
+    footer {
+      text-align: center;
+      color: #888;
+      font-size: 12px;
+      padding-bottom: 30px;
+    }
 
-.notice{
-  padding:13px;
-  border-radius:13px;
-  background:#f6f6f3;
-  color:#666;
-  font-size:13px;
-  line-height:1.5;
-}
+    @media (max-width: 720px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
 
-footer{
-  text-align:center;
-  color:#888;
-  font-size:12px;
-  padding:10px 0 30px;
-}
+      .full {
+        grid-column: auto;
+      }
 
-@media(max-width:720px){
+      .photo-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
 
-  .container{
-    width:min(100% - 20px,1050px);
-  }
+      .stats {
+        grid-template-columns: 1fr 1fr;
+      }
 
-  .grid{
-    grid-template-columns:1fr;
-  }
-
-  .full{
-    grid-column:auto;
-  }
-
-  .hero{
-    padding-top:25px;
-  }
-
-  .photo-grid{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-  .stats{
-    grid-template-columns:1fr 1fr;
-  }
-
-  .price{
-    font-size:46px;
-  }
-
-}
-
-</style>
+      .price {
+        font-size: 45px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
 <div class="container">
 
-<header>
+  <header>
+    <div class="logo">ResellAI Studio</div>
+    <div class="badge">AI RESELLER</div>
+  </header>
 
-  <div class="logo">
-    ResellAI Studio
-  </div>
+  <section class="hero">
+    <div class="eyebrow">AI workspace per reseller</div>
 
-  <div class="badge">
-    AI RESELLER
-  </div>
+    <h1>
+      Da 1–8 foto a un annuncio pronto.
+    </h1>
 
-</header>
+    <p>
+      Carica le foto dell'articolo, aggiungi qualche dettaglio
+      e lascia che l'AI prepari un annuncio ottimizzato per la vendita.
+    </p>
+  </section>
 
+  <div class="grid">
 
-<section class="hero">
+    <!-- FOTO -->
 
-  <div class="eyebrow">
-    AI workspace per reseller
-  </div>
+    <section class="card full">
 
-  <h1>
-    Da 1–8 foto a un annuncio pronto.
-  </h1>
+      <div class="eyebrow">01 · Fotografie</div>
 
-  <p>
-    Carica le foto del tuo articolo, aggiungi qualche dettaglio
-    e lascia che l'intelligenza artificiale prepari un annuncio
-    ottimizzato per la vendita.
-  </p>
+      <h2>📸 Foto dell'articolo</h2>
 
-</section>
+      <label class="upload">
 
+        <input
+          id="fileInput"
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          multiple
+        >
 
-<div class="grid">
+        <span class="upload-title">
+          🖼️ Scegli fino a 8 foto dalla galleria
+        </span>
 
+        <span class="upload-subtitle">
+          Puoi selezionare più immagini contemporaneamente.
+        </span>
 
-<!-- FOTO -->
+      </label>
 
-<section class="card full">
+      <div
+        id="photoCounter"
+        class="photo-counter"
+      >
+        0 / 8 foto
+      </div>
 
-  <div class="eyebrow">
-    01 · Fotografie
-  </div>
+      <div
+        id="photoGrid"
+        class="photo-grid"
+      ></div>
 
-  <h2>
-    📸 Foto dell'articolo
-  </h2>
-
-  <label class="upload">
-
-    <input
-      id="fileInput"
-      type="file"
-      accept="image/jpeg,image/png,image/webp"
-      multiple
-    >
-
-    <span class="upload-title">
-      🖼️ Scegli fino a 8 foto dalla galleria
-    </span>
-
-    <span class="upload-subtitle">
-      Puoi selezionare più immagini contemporaneamente.
-    </span>
-
-  </label>
-
-  <div
-    id="photoCounter"
-    class="photo-counter"
-  >
-    0 / 8 foto
-  </div>
-
-  <div
-    id="photoGrid"
-    class="photo-grid"
-  ></div>
-
-</section>
+    </section>
 
 
-<!-- DESCRIZIONE UTENTE -->
+    <!-- DESCRIZIONE -->
 
-<section class="card full">
+    <section class="card full">
 
-  <div class="eyebrow">
-    02 · Informazioni
-  </div>
+      <div class="eyebrow">02 · Informazioni</div>
 
-  <h2>
-    💬 Raccontaci qualcosa dell'articolo
-  </h2>
+      <h2>💬 Raccontaci qualcosa dell'articolo</h2>
 
-  <textarea
-    id="userDescription"
-    placeholder="Esempio: indossate poche volte, acquistate in negozio ufficiale, scatola originale inclusa, piccolo segno sulla suola..."
-  ></textarea>
+      <textarea
+        id="userDescription"
+        placeholder="Esempio: Nike Air Max nere, taglia 42, indossate poche volte, scatola originale inclusa..."
+      ></textarea>
 
-  <div class="helper">
-    Queste informazioni verranno unite a ciò che l'AI vede nelle
-    fotografie per creare un annuncio più preciso e credibile.
-  </div>
+      <div class="helper">
+        L'AI userà queste informazioni insieme alle fotografie.
+        Non inventerà caratteristiche che non risultano verificabili.
+      </div>
 
-</section>
+    </section>
 
 
-<!-- MARKETPLACE -->
+    <!-- MARKETPLACE -->
 
-<section class="card">
+    <section class="card">
 
-  <div class="eyebrow">
-    03 · Marketplace
-  </div>
+      <div class="eyebrow">03 · Marketplace</div>
 
-  <h2>
-    Dove vuoi venderlo?
-  </h2>
+      <h2>Dove vuoi venderlo?</h2>
 
-  <div
-    id="marketGrid"
-    class="market-grid"
-  ></div>
+      <div
+        id="marketGrid"
+        class="market-grid"
+      ></div>
 
-  <h3>
-    Strategia prezzo
-  </h3>
+      <h3>Strategia prezzo</h3>
 
-  <div
-    id="goalRow"
-    class="goal-row"
-  ></div>
+      <div
+        id="goalRow"
+        class="goal-row"
+      ></div>
 
-</section>
+    </section>
 
 
-<!-- ANALISI -->
+    <!-- ANALISI -->
 
-<section class="card">
+    <section class="card">
 
-  <div class="eyebrow">
-    04 · Analisi AI
-  </div>
+      <div class="eyebrow">04 · Analisi AI</div>
 
-  <h2 id="status">
-    In attesa delle foto
-  </h2>
+      <h2
+        id="status"
+        class="status"
+      >
+        In attesa delle foto
+      </h2>
 
-  <div class="progress">
-    <div
-      id="progressBar"
-      class="progress-bar"
-    ></div>
-  </div>
+      <div class="progress">
+        <div
+          id="progressBar"
+          class="progress-bar"
+        ></div>
+      </div>
 
-  <div class="stats">
+      <div class="stats">
 
-    <div class="stat">
-      <span class="stat-label">
-        Brand
-      </span>
-      <strong
-        id="brand"
-        class="stat-value"
+        <div class="stat">
+          <span class="stat-label">Brand</span>
+          <strong
+            id="brand"
+            class="stat-value"
+          >—</strong>
+        </div>
+
+        <div class="stat">
+          <span class="stat-label">Categoria</span>
+          <strong
+            id="category"
+            class="stat-value"
+          >—</strong>
+        </div>
+
+        <div class="stat">
+          <span class="stat-label">Condizione</span>
+          <strong
+            id="condition"
+            class="stat-value"
+          >—</strong>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- PULSANTE -->
+
+    <section class="card full">
+
+      <div class="button-row">
+
+        <button
+          class="btn"
+          onclick="resetAll()"
+        >
+          🗑️ Rimuovi tutto
+        </button>
+
+        <button
+          id="analyzeButton"
+          class="btn primary"
+          disabled
+          onclick="analyze()"
+        >
+          🚀 Analizza e crea annuncio
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- PREZZO -->
+
+    <section class="card">
+
+      <div class="eyebrow">05 · Prezzo</div>
+
+      <h2 id="marketName">Vinted</h2>
+
+      <div
+        id="price"
+        class="price"
       >
         —
-      </strong>
-    </div>
+      </div>
 
-    <div class="stat">
-      <span class="stat-label">
-        Categoria
-      </span>
-      <strong
-        id="category"
-        class="stat-value"
+      <div class="price-label">
+        Prezzo consigliato
+      </div>
+
+      <div class="stats">
+
+        <div class="stat">
+          <span class="stat-label">⚡ Vendita rapida</span>
+          <strong
+            id="quickPrice"
+            class="stat-value"
+          >—</strong>
+        </div>
+
+        <div class="stat">
+          <span class="stat-label">⭐ Confidenza AI</span>
+          <strong
+            id="confidence"
+            class="stat-value"
+          >—</strong>
+        </div>
+
+        <div class="stat">
+          <span class="stat-label">📅 Stima vendita</span>
+          <strong
+            id="estimatedDays"
+            class="stat-value"
+          >—</strong>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ANNUNCIO -->
+
+    <section class="card">
+
+      <div class="eyebrow">06 · Listing</div>
+
+      <h2>✨ Annuncio pronto</h2>
+
+      <div
+        id="listing"
+        class="listing"
       >
-        —
-      </strong>
-    </div>
+        Carica le foto e premi
+        "Analizza e crea annuncio".
+      </div>
 
-    <div class="stat">
-      <span class="stat-label">
-        Condizione
-      </span>
-      <strong
-        id="condition"
-        class="stat-value"
-      >
-        —
-      </strong>
-    </div>
+      <div class="button-row">
 
-  </div>
+        <button
+          class="btn primary"
+          onclick="copyListing()"
+        >
+          📋 Copia annuncio
+        </button>
 
-</section>
+        <button
+          class="btn"
+          onclick="improveImages()"
+        >
+          ✨ Migliora immagini
+        </button>
 
+      </div>
 
-<!-- AZIONE -->
-
-<section class="card full">
-
-  <div class="button-row">
-
-    <button
-      id="resetButton"
-      class="btn"
-      onclick="resetAll()"
-    >
-      🗑️ Rimuovi foto
-    </button>
-
-    <button
-      id="analyzeButton"
-      class="btn primary"
-      disabled
-      onclick="analyze()"
-    >
-      🚀 Analizza e crea annuncio
-    </button>
+    </section>
 
   </div>
 
-</section>
-
-
-<!-- PREZZO -->
-
-<section class="card">
-
-  <div class="eyebrow">
-    05 · Prezzo
+  <div class="notice">
+    💡 <strong>Consiglio:</strong>
+    usa foto del fronte, retro, etichetta, logo, dettagli e
+    eventuali difetti. Più informazioni fornisci, più accurata
+    sarà l'analisi.
   </div>
 
-  <h2 id="marketName">
-    Vinted
-  </h2>
-
-  <div
-    id="price"
-    class="price"
-  >
-    —
-  </div>
-
-  <div class="price-label">
-    Prezzo consigliato
-  </div>
-
-  <div class="stats">
-
-    <div class="stat">
-
-      <span class="stat-label">
-        ⚡ Vendita rapida
-      </span>
-
-      <strong
-        id="quickPrice"
-        class="stat-value"
-      >
-        —
-      </strong>
-
-    </div>
-
-    <div class="stat">
-
-      <span class="stat-label">
-        ⭐ Confidenza AI
-      </span>
-
-      <strong
-        id="confidence"
-        class="stat-value"
-      >
-        —
-      </strong>
-
-    </div>
-
-    <div class="stat">
-
-      <span class="stat-label">
-        📅 Vendita stimata
-      </span>
-
-      <strong
-        id="estimatedDays"
-        class="stat-value"
-      >
-        —
-      </strong>
-
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- ANNUNCIO -->
-
-<section class="card">
-
-  <div class="eyebrow">
-    06 · Listing
-  </div>
-
-  <h2>
-    ✨ Annuncio pronto
-  </h2>
-
-  <div
-    id="listing"
-    class="listing"
-  >
-    Carica le foto e premi
-    "Analizza e crea annuncio".
-  </div>
-
-  <div class="button-row">
-
-    <button
-      class="btn primary"
-      onclick="copyListing()"
-    >
-      📋 Copia annuncio
-    </button>
-
-    <button
-      class="btn"
-      onclick="improveImages()"
-    >
-      ✨ Migliora immagini
-    </button>
-
-  </div>
-
-</section>
-
-
-</div>
-
-
-<div class="notice">
-
-  💡 <strong>Consiglio:</strong>
-  aggiungi più foto possibili: fronte, retro, etichetta,
-  dettagli, logo e eventuali difetti. Più informazioni
-  fornisci, più accurata sarà l'analisi.
-
-</div>
-
-
-<footer>
-  ResellAI Studio · AI Reseller
-</footer>
+  <footer>
+    ResellAI Studio · AI Reseller
+  </footer>
 
 </div>
 
@@ -762,33 +669,25 @@ footer{
 <script>
 
 const state = {
-
-  marketplace:"Vinted",
-
-  goal:"Equilibrato",
-
-  files:[]
-
+  marketplace: "Vinted",
+  goal: "Equilibrato",
+  files: []
 };
 
 
 const marketplaces = [
-
   "Vinted",
   "eBay",
   "Depop",
   "Grailed",
   "Vestiaire Collective"
-
 ];
 
 
 const goals = [
-
   "Veloce",
   "Equilibrato",
   "Profitto"
-
 ];
 
 
@@ -849,7 +748,7 @@ const userDescription =
 
 /* MARKETPLACE */
 
-function renderMarketplaces(){
+function renderMarketplaces() {
 
   marketGrid.innerHTML =
     marketplaces.map(name => {
@@ -864,11 +763,8 @@ function renderMarketplaces(){
           class="market ${selected}"
           onclick="selectMarketplace('${name}')"
         >
-
           <span>${name}</span>
-
           <b>›</b>
-
         </div>
       `;
 
@@ -876,13 +772,12 @@ function renderMarketplaces(){
 
   marketName.textContent =
     state.marketplace;
-
 }
 
 
 /* STRATEGIA */
 
-function renderGoals(){
+function renderGoals() {
 
   goalRow.innerHTML =
     goals.map(name => {
@@ -902,31 +797,26 @@ function renderGoals(){
       `;
 
     }).join("");
-
 }
 
 
-function selectMarketplace(name){
+function selectMarketplace(name) {
 
-  state.marketplace =
-    name;
+  state.marketplace = name;
 
   renderMarketplaces();
-
 }
 
 
-function selectGoal(name){
+function selectGoal(name) {
 
-  state.goal =
-    name;
+  state.goal = name;
 
   renderGoals();
-
 }
 
 
-/* FOTO */
+/* SELEZIONE FOTO */
 
 fileInput.addEventListener(
   "change",
@@ -934,317 +824,410 @@ fileInput.addEventListener(
 );
 
 
-function handleFiles(event){
+function handleFiles(event) {
 
   const files =
-    Array.from(
-      event.target.files || []
-    );
+    Array.from(event.target.files || []);
+
+  if (!files.length) {
+    return;
+  }
 
   const available =
     8 - state.files.length;
 
-  if(available <= 0){
+  if (available <= 0) {
 
     alert(
       "Hai già raggiunto il limite di 8 foto."
     );
 
-    return;
+    fileInput.value = "";
 
+    return;
   }
 
   const selected =
-    files.slice(
-      0,
-      available
-    );
+    files.slice(0, available);
 
-  state.files.push(
-    ...selected
-  );
+  state.files.push(...selected);
 
-  if(files.length > available){
+  if (files.length > available) {
 
     alert(
       "Puoi caricare massimo 8 foto."
     );
-
   }
 
   fileInput.value = "";
 
   renderPhotos();
-
 }
 
 
-function renderPhotos(){
+/* MINIATURE */
+
+function renderPhotos() {
 
   photoGrid.innerHTML = "";
 
-  state.files.forEach(
-    (file,index) => {
+  state.files.forEach((file, index) => {
 
-      const wrapper =
-        document.createElement("div");
+    const wrapper =
+      document.createElement("div");
 
-      wrapper.className =
-        "photo";
+    wrapper.className = "photo";
 
-      const image =
-        document.createElement("img");
+    const image =
+      document.createElement("img");
 
-      image.src =
-        URL.createObjectURL(file);
+    image.alt =
+      "Foto articolo " + (index + 1);
 
-      const number =
-        document.createElement("div");
+    image.src =
+      URL.createObjectURL(file);
 
-      number.className =
-        "photo-number";
+    const number =
+      document.createElement("div");
 
-      number.textContent =
-        index + 1;
+    number.className =
+      "photo-number";
 
-      const remove =
-        document.createElement("button");
+    number.textContent =
+      index + 1;
 
-      remove.className =
-        "remove";
+    const remove =
+      document.createElement("button");
 
-      remove.textContent =
-        "×";
+    remove.type = "button";
 
-      remove.onclick =
-        () => removePhoto(index);
+    remove.className =
+      "remove-photo";
 
-      wrapper.appendChild(image);
+    remove.textContent =
+      "×";
 
-      wrapper.appendChild(number);
+    remove.onclick =
+      function() {
+        removePhoto(index);
+      };
 
-      wrapper.appendChild(remove);
+    wrapper.appendChild(image);
+    wrapper.appendChild(number);
+    wrapper.appendChild(remove);
 
-      photoGrid.appendChild(wrapper);
+    photoGrid.appendChild(wrapper);
 
-    }
-  );
-
+  });
 
   photoCounter.textContent =
-    `${state.files.length} / 8 foto`;
-
+    state.files.length + " / 8 foto";
 
   analyzeButton.disabled =
     state.files.length === 0;
 
-
-  if(state.files.length > 0){
+  if (state.files.length > 0) {
 
     status.textContent =
-      `${state.files.length} foto pronte per l'analisi`;
+      state.files.length +
+      " foto pronte per l'analisi";
 
-  }else{
+  } else {
 
     status.textContent =
       "In attesa delle foto";
-
   }
-
 }
 
 
-function removePhoto(index){
+function removePhoto(index) {
 
-  state.files.splice(
-    index,
-    1
-  );
+  state.files.splice(index, 1);
 
   renderPhotos();
-
 }
 
 
-/* CONVERSIONE FOTO */
+/*
+  RIDIMENSIONAMENTO E COMPRESSIONE
 
-function fileToDataURL(file){
+  Convertiamo qualsiasi foto in JPEG.
+  Questo evita problemi con PNG/WEBP e
+  riduce enormemente la dimensione della richiesta.
+*/
 
-  return new Promise((resolve,reject)=>{
+function fileToDataURL(file) {
 
-    const reader = new FileReader();
+  return new Promise((resolve, reject) => {
 
-    reader.onload = () => {
+    const reader =
+      new FileReader();
 
-      const img = new Image();
+    reader.onload = function() {
 
-      img.onload = () => {
+      const image =
+        new Image();
 
-        const maxSize = 1600;
+      image.onload = function() {
 
-        let width = img.width;
-        let height = img.height;
+        const MAX_SIZE = 1400;
 
-        if(width > height && width > maxSize){
+        let width =
+          image.naturalWidth;
 
-          height =
-            Math.round(
-              height * maxSize / width
-            );
+        let height =
+          image.naturalHeight;
 
-          width = maxSize;
+        if (!width || !height) {
 
-        }else if(height > maxSize){
+          reject(
+            new Error(
+              "Dimensioni immagine non valide."
+            )
+          );
 
-          width =
-            Math.round(
-              width * maxSize / height
-            );
+          return;
+        }
 
-          height = maxSize;
+        if (width > MAX_SIZE || height > MAX_SIZE) {
 
+          if (width > height) {
+
+            height =
+              Math.round(
+                height * MAX_SIZE / width
+              );
+
+            width =
+              MAX_SIZE;
+
+          } else {
+
+            width =
+              Math.round(
+                width * MAX_SIZE / height
+              );
+
+            height =
+              MAX_SIZE;
+          }
         }
 
         const canvas =
           document.createElement("canvas");
 
-        canvas.width = width;
-        canvas.height = height;
+        canvas.width =
+          width;
 
-        const ctx =
+        canvas.height =
+          height;
+
+        const context =
           canvas.getContext("2d");
 
-        ctx.drawImage(
-          img,
+        if (!context) {
+
+          reject(
+            new Error(
+              "Impossibile elaborare l'immagine."
+            )
+          );
+
+          return;
+        }
+
+        context.drawImage(
+          image,
           0,
           0,
           width,
           height
         );
 
-        // Convertiamo SEMPRE in JPEG
-        const compressed =
+        const result =
           canvas.toDataURL(
             "image/jpeg",
-            0.82
+            0.78
           );
 
-        resolve(compressed);
+        if (
+          typeof result !== "string" ||
+          !result.startsWith("data:image/jpeg;base64,")
+        ) {
+
+          reject(
+            new Error(
+              "Formato immagine non valido."
+            )
+          );
+
+          return;
+        }
+
+        resolve(result);
 
       };
 
-      img.onerror = () => {
+      image.onerror =
+        function() {
+
+          reject(
+            new Error(
+              "Impossibile leggere una delle foto."
+            )
+          );
+
+        };
+
+      image.src =
+        reader.result;
+    };
+
+    reader.onerror =
+      function() {
+
         reject(
           new Error(
-            "Impossibile leggere una delle immagini."
+            "Impossibile leggere il file."
           )
         );
+
       };
 
-      img.src = reader.result;
-
-    };
-
-    reader.onerror = () => {
-
-      reject(
-        new Error(
-          "Impossibile leggere il file."
-        )
-      );
-
-    };
-
     reader.readAsDataURL(file);
-
   });
-
 }
+
 
 /* ANALISI */
 
-async function analyze(){
+async function analyze() {
 
-  if(state.files.length === 0){
+  if (!state.files.length) {
 
     alert(
       "📸 Carica almeno una foto."
     );
 
     return;
-
   }
-
 
   analyzeButton.disabled =
     true;
 
   status.textContent =
-    "Preparazione delle foto…";
+    "⏳ Preparazione delle foto...";
 
   progressBar.style.width =
     "10%";
 
+  try {
 
-  try{
+    const images = [];
 
-    const images =
-      await Promise.all(
-        state.files.map(
-          fileToDataURL
-        )
-      );
+    for (
+      let i = 0;
+      i < state.files.length;
+      i++
+    ) {
+
+      status.textContent =
+        "🖼️ Preparazione foto " +
+        (i + 1) +
+        " di " +
+        state.files.length +
+        "...";
+
+      const image =
+        await fileToDataURL(
+          state.files[i]
+        );
+
+      images.push(image);
+
+      progressBar.style.width =
+        (
+          10 +
+          ((i + 1) /
+            state.files.length) *
+          30
+        ) + "%";
+    }
 
 
     status.textContent =
-      `🤖 Gemini sta analizzando ${images.length} foto…`;
+      "🤖 Gemini sta analizzando le foto...";
 
     progressBar.style.width =
-      "40%";
+      "50%";
+
+
+    const payload = {
+      images: images,
+
+      userDescription:
+        userDescription.value.trim(),
+
+      marketplace:
+        state.marketplace,
+
+      goal:
+        state.goal
+    };
 
 
     const response =
       await fetch(
         "/api/analyze",
         {
+          method: "POST",
 
-          method:"POST",
-
-          headers:{
+          headers: {
             "Content-Type":
+              "application/json",
+            "Accept":
               "application/json"
           },
 
-          body:JSON.stringify({
-
-            images,
-
-            userDescription:
-              userDescription.value.trim(),
-
-            marketplace:
-              state.marketplace,
-
-            goal:
-              state.goal
-
-          })
-
+          body:
+            JSON.stringify(payload)
         }
       );
 
 
-    const data =
-      await response.json();
+    const responseText =
+      await response.text();
 
 
-    if(!response.ok){
+    let data;
+
+    try {
+
+      data =
+        responseText
+          ? JSON.parse(responseText)
+          : {};
+
+    } catch (parseError) {
+
+      console.error(
+        "Risposta non JSON:",
+        responseText
+      );
+
+      throw new Error(
+        "Il server ha restituito una risposta non valida."
+      );
+    }
+
+
+    if (!response.ok) {
 
       throw new Error(
         data.error ||
-        "Errore durante l'analisi."
+        "Errore API: " +
+        response.status
       );
-
     }
 
 
@@ -1277,9 +1260,9 @@ async function analyze(){
 
     price.textContent =
       "€ " +
-      (Number(
-        recommendedPrice
-      ) || 0);
+      (
+        Number(recommendedPrice) || 0
+      );
 
 
     quickPrice.textContent =
@@ -1293,12 +1276,15 @@ async function analyze(){
 
     /* CONFIDENZA */
 
+    const confidenceValue =
+      Number(data.confidence);
+
     confidence.textContent =
-      data.confidence
+      Number.isFinite(
+        confidenceValue
+      )
         ? Math.round(
-            Number(
-              data.confidence
-            ) * 100
+            confidenceValue * 100
           ) + "%"
         : "—";
 
@@ -1313,17 +1299,14 @@ async function analyze(){
     /* HASHTAG */
 
     const hashtags =
-      Array.isArray(
-        data.hashtags
-      )
+      Array.isArray(data.hashtags)
         ? data.hashtags.join(" ")
         : "";
 
 
-    /* LISTING */
+    /* ANNUNCIO */
 
     listing.textContent =
-
 `🏷️ TITOLO
 
 ${data.title || "Titolo non disponibile"}
@@ -1366,7 +1349,7 @@ ${hashtags}`;
       "✨ Analisi completata!";
 
 
-  }catch(error){
+  } catch (error) {
 
     console.error(
       "ResellAI error:",
@@ -1380,45 +1363,43 @@ ${hashtags}`;
       "❌ Errore durante l'analisi";
 
     alert(
-      error.message ||
-      "Non è stato possibile completare l'analisi."
+      error && error.message
+        ? error.message
+        : "Errore durante l'analisi."
     );
 
-
-  }finally{
+  } finally {
 
     analyzeButton.disabled =
       state.files.length === 0;
-
   }
-
 }
 
 
 /* COPIA */
 
-function copyListing(){
+async function copyListing() {
 
   const text =
     listing.textContent.trim();
 
-  if(!text){
+  if (
+    !text ||
+    text.startsWith(
+      "Carica le foto"
+    )
+  ) {
 
     alert(
-      "Non c'è ancora nessun annuncio da copiare."
+      "Prima crea un annuncio."
     );
 
     return;
-
   }
 
+  try {
 
-  if(
-    navigator.clipboard &&
-    navigator.clipboard.writeText
-  ){
-
-    navigator.clipboard.writeText(
+    await navigator.clipboard.writeText(
       text
     );
 
@@ -1426,20 +1407,18 @@ function copyListing(){
       "📋 Annuncio copiato!"
     );
 
-  }else{
+  } catch {
 
     alert(
-      "Seleziona e copia manualmente il testo."
+      "Non è stato possibile copiare automaticamente il testo."
     );
-
   }
-
 }
 
 
 /* RESET */
 
-function resetAll(){
+function resetAll() {
 
   state.files = [];
 
@@ -1471,18 +1450,16 @@ function resetAll(){
 
   listing.textContent =
     'Carica le foto e premi "Analizza e crea annuncio".';
-
 }
 
 
-/* MIGLIORA FOTO */
+/* FUNZIONE PROVVISORIA */
 
-function improveImages(){
+function improveImages() {
 
   alert(
-    "✨ La funzione di ottimizzazione professionale delle foto sarà collegata nel prossimo aggiornamento."
+    "✨ L'ottimizzazione professionale delle immagini verrà collegata nel prossimo aggiornamento."
   );
-
 }
 
 
