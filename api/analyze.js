@@ -12,8 +12,11 @@ export default async function handler(req, res) {
       });
     }
 
-    const { image, marketplace = "Vinted", goal = "Equilibrato" } =
-      req.body || {};
+    const {
+      image,
+      marketplace = "Vinted",
+      goal = "Equilibrato"
+    } = req.body || {};
 
     if (!image || typeof image !== "string") {
       return res.status(400).json({
@@ -39,9 +42,7 @@ Sei un esperto di reselling di moda e streetwear.
 
 Analizza attentamente la foto.
 
-Restituisci ESCLUSIVAMENTE JSON valido, senza markdown e senza testo aggiuntivo.
-
-Struttura:
+Restituisci esclusivamente JSON valido:
 
 {
   "brand": "",
@@ -59,46 +60,39 @@ Struttura:
   "hashtags": []
 }
 
-Regole:
-- Non inventare dettagli non visibili.
-- Se non puoi identificare qualcosa usa "Non identificato".
-- confidence deve essere un numero tra 0 e 1.
-- I prezzi devono essere stime prudenti del mercato europeo dell'usato.
-- La condizione deve basarsi esclusivamente sulla foto.
-- Crea un titolo adatto a ${marketplace}.
-- Crea una descrizione pronta per la pubblicazione.
-- hashtags deve essere un array di stringhe.
+Non inventare dettagli non visibili.
+Se un dato non è identificabile usa "Non identificato".
+confidence deve essere compreso tra 0 e 1.
+I prezzi devono essere stime prudenti del mercato europeo dell'usato.
 
 Marketplace: ${marketplace}
 Strategia: ${goal}
 `;
 
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
+      "https://generativelanguage.googleapis.com/v1beta/interactions",
       {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          "x-goog-api-key": apiKey,
+          "Api-Revision": "2026-05-20"
         },
         body: JSON.stringify({
-          contents: [
+          model: "gemini-3.6-flash",
+          input: [
             {
-              parts: [
-                {
-                  text: prompt
-                },
-                {
-                  inline_data: {
-                    mime_type: mimeType,
-                    data: base64Data
-                  }
-                }
-              ]
+              type: "text",
+              text: prompt
+            },
+            {
+              type: "image",
+              data: base64Data,
+              mime_type: mimeType
             }
           ],
-          generationConfig: {
-            responseMimeType: "application/json",
-            temperature: 0.2
+          response_format: {
+            type: "json"
           }
         })
       }
@@ -117,7 +111,11 @@ Strategia: ${goal}
     }
 
     const text =
-      data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
+      data?.steps
+        ?.filter(step => step.type === "model_output")
+        ?.flatMap(step => step.content || [])
+        ?.find(content => content.type === "text")
+        ?.text || "";
 
     if (!text) {
       return res.status(500).json({
@@ -129,8 +127,8 @@ Strategia: ${goal}
 
     try {
       result = JSON.parse(text);
-    } catch (error) {
-      console.error("Gemini JSON error:", text);
+    } catch {
+      console.error("Invalid Gemini JSON:", text);
 
       return res.status(500).json({
         error: "La risposta Gemini non è nel formato previsto."
@@ -143,9 +141,7 @@ Strategia: ${goal}
     console.error("Analyze error:", error);
 
     return res.status(500).json({
-      error:
-        error?.message ||
-        "Errore durante l'analisi AI."
+      error: error?.message || "Errore durante l'analisi AI."
     });
   }
 }
