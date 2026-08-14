@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111111">
+<title>ResellAI Studio</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f5f5f3;color:#151515;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.wrap{max-width:900px;margin:auto;padding:16px}.top{display:flex;justify-content:space-between;align-items:center}.logo{font-weight:800;font-size:21px}.badge{background:#111;color:#fff;border-radius:20px;padding:8px 12px;font-size:12px}.card{background:white;border:1px solid #e5e5e5;border-radius:20px;padding:18px;margin:14px 0;box-shadow:0 5px 25px #00000009}.hero h1{font-size:clamp(38px,8vw,64px);line-height:.95;letter-spacing:-.06em;margin:10px 0}.muted{color:#777}.upload{display:block;border:2px dashed #ccc;border-radius:16px;padding:26px;text-align:center;background:#fafafa;cursor:pointer}.upload input{display:none}.photo{width:100%;max-height:430px;object-fit:contain;border-radius:14px;margin-top:12px;background:#eee}.btn{border:1px solid #ddd;background:#fff;border-radius:11px;padding:11px 14px;font-weight:700}.primary{background:#111;color:#fff;border-color:#111}.row{display:flex;gap:8px;flex-wrap:wrap}.market{padding:13px;border:1px solid #e5e5e5;border-radius:12px;margin:8px 0;display:flex;justify-content:space-between}.sel{border-color:#111;background:#f5f5f5}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.stat{background:#f7f7f7;border-radius:13px;padding:13px}.stat strong{display:block;font-size:20px;margin-top:5px}.price{font-size:40px;font-weight:850}.listing{white-space:pre-wrap;background:#f7f7f7;border-radius:13px;padding:14px;line-height:1.5}.hide{display:none}@media(max-width:650px){.stats{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top"><div class="logo">ResellAI Studio</div><div class="badge">MVP</div></header>
+<section class="card hero"><div class="muted">AI workspace per reseller</div><h1>Da una foto a un annuncio pronto.</h1><p class="muted">Carica il prodotto, scegli dove venderlo e ottieni una stima di prezzo e un annuncio.</p></section>
+<section class="card">
+<div class="muted">01 · FOTO</div><h2>AI Photo Studio</h2>
+<label class="upload"><input id="file" type="file" accept="image/*" capture="environment"><b>📸 Scatta o carica una foto</b><br><span class="muted">Anteprima ottimizzata nel prototipo</span></label>
+<img id="photo" class="photo hide">
+<div class="row" style="margin-top:10px"><button class="btn" onclick="resetPhoto()">Rimuovi</button><button class="btn primary" id="go" disabled onclick="analyze()">Analizza articolo</button></div>
+</section>
+<section class="card"><div class="muted">02 · DOVE VENDERLO</div><h2>Scegli marketplace</h2><div id="markets"></div><div class="muted">Obiettivo</div><div class="row" id="goals" style="margin-top:8px"></div></section>
+<section class="card"><div class="muted">03 · ANALISI AI</div><h2 id="status">Carica una foto per iniziare</h2><div class="stats"><div class="stat">Brand<strong id="brand">—</strong></div><div class="stat">Categoria<strong id="cat">—</strong></div><div class="stat">Condizione<strong id="cond">—</strong></div></div></section>
+<section class="card"><div class="muted">04 · PREZZO</div><h2 id="mname">Vinted</h2><div class="price" id="price">€ 82</div><div class="muted">Prezzo consigliato</div><div class="stats" style="margin-top:10px"><div class="stat">Veloce<strong id="fast">€ 69</strong></div><div class="stat">Probabilità<strong id="prob">78%</strong></div><div class="stat">Tempo<strong id="speed">4–10 gg</strong></div></div></section>
+<section class="card"><div class="muted">05 · LISTING PACK</div><h2>Annuncio</h2><div id="listing" class="listing">L'annuncio verrà generato dopo l'analisi.</div><div class="row" style="margin-top:10px"><button class="btn primary" onclick="copyListing()">Copia annuncio</button><button class="btn" onclick="alert('Il modulo di generazione immagini AI è predisposto per il collegamento al generatore.')">Genera foto AI</button><button class="btn" onclick="compare()">Confronta</button></div></section>
+<p class="muted" style="text-align:center;font-size:12px">Prototipo ResellAI · dati prezzo dimostrativi</p>
+</div>
+<script>
+const data={Vinted:{p:82,f:69,t:"4–10 gg",q:78},eBay:{p:94,f:83,t:"7–18 gg",q:71},Depop:{p:88,f:77,t:"5–15 gg",q:74},Grailed:{p:105,f:92,t:"8–20 gg",q:66},"Vestiaire Collective":{p:118,f:104,t:"10–28 gg",q:61}};
+let market="Vinted",goal="Equilibrato",ready=false;
+function render(){
+ markets.innerHTML=Object.keys(data).map(x=>`<div class="market ${x==market?'sel':''}" onclick="market='${x}';render()"><span>${x}</span><b>›</b></div>`).join("");
+ goals.innerHTML=["Veloce","Equilibrato","Profitto"].map(x=>`<button class="btn ${x==goal?'primary':''}" onclick="goal='${x}';render()">${x}</button>`).join("");
+ let d=data[market], price=Math.round(d.p*(goal=="Veloce"?.84:goal=="Profitto"?1.14:1));
+ mname.textContent=market;document.getElementById("price").textContent="€ "+price;fast.textContent="€ "+d.f;prob.textContent=d.q+"%";speed.textContent=d.t;
+ if(ready) listing.textContent=`Titolo: Palm Angels Tokyo Logo T-Shirt Black – Size L
+
+Descrizione:
+T-shirt Palm Angels nera con logo Tokyo. Taglia L, ottime condizioni. Foto reali dell'articolo. Spedizione rapida.
+
+Brand: Palm Angels
+Categoria: T-shirt
+Taglia: L
+Condizione: Ottima
+Prezzo su ${market}: € ${price}
+
+#palmangels #streetwear #designer #tshirt`;
+}
+file.onchange=e=>{let f=e.target.files[0];if(!f)return;photo.src=URL.createObjectURL(f);photo.classList.remove("hide");go.disabled=false};
+function resetPhoto(){file.value="";photo.classList.add("hide");go.disabled=true;ready=false}
+function analyze(){ready=true;status.textContent="Articolo riconosciuto";brand.textContent="Palm Angels";cat.textContent="T-shirt";cond.textContent="Ottima";render()}
+function copyListing(){navigator.clipboard?.writeText(listing.textContent);alert("Annuncio copiato")}
+function compare(){alert(Object.entries(data).map(([k,v])=>`${k}: €${v.p} · ${v.q}% · ${v.t}`).join("\n"))}
+render();
+</script>
+</body>
+</html>
