@@ -1,144 +1,1431 @@
-<html lang="it"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#0b0b0c"><title>ResellAI Studio V2</title>
-<style>
-*{box-sizing:border-box}body{margin:0;background:#f4f4f1;color:#111;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.wrap{max-width:980px;margin:auto;padding:18px}.nav{display:flex;justify-content:space-between}.logo{font-weight:900;font-size:21px}.pill{background:#111;color:#fff;padding:8px 12px;border-radius:99px;font-size:12px}.hero{padding:38px 0 22px}.eyebrow{font-size:12px;font-weight:800;letter-spacing:.12em;color:#777;text-transform:uppercase}.hero h1{font-size:clamp(42px,8vw,76px);line-height:.92;letter-spacing:-.06em;max-width:850px;margin:10px 0}.hero p{color:#777;font-size:17px}.grid{display:grid;grid-template-columns:1.15fr .85fr;gap:14px}.card{background:#fff;border:1px solid #e5e5e1;border-radius:22px;padding:20px;box-shadow:0 8px 35px #00000008}.full{grid-column:1/-1}.card h2{margin:7px 0 16px}.upload{display:block;border:2px dashed #ccc;border-radius:18px;padding:32px 18px;text-align:center;background:#fafaf8;cursor:pointer}.upload input{display:none}.photo{width:100%;height:310px;object-fit:contain;background:#eee;border-radius:16px;margin-top:12px}.hide{display:none}.row{display:flex;gap:8px;flex-wrap:wrap}.btn{border:1px solid #ddd;background:#fff;border-radius:12px;padding:11px 14px;font-weight:750}.primary{background:#111;color:#fff;border-color:#111}.btn:disabled{opacity:.45}.markets{display:grid;gap:8px}.market{padding:13px;border:1px solid #e5e5e1;border-radius:13px;display:flex;justify-content:space-between}.sel{border:2px solid #111;background:#f7f7f5;padding:12px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.stat{background:#f6f6f3;border-radius:14px;padding:13px}.stat span{display:block;color:#777;font-size:12px}.stat strong{display:block;font-size:20px;margin-top:5px}.price{font-size:52px;font-weight:900;letter-spacing:-.06em}.listing{white-space:pre-wrap;background:#f6f6f3;border-radius:15px;padding:15px;line-height:1.5}.progress{height:8px;background:#ecece9;border-radius:99px;overflow:hidden}.progress i{display:block;height:100%;width:0;background:#111;transition:width .5s}.note{font-size:12px;color:#888;margin-top:10px}@media(max-width:720px){.grid{grid-template-columns:1fr}.full{grid-column:auto}.stats{grid-template-columns:1fr 1fr}}
-</style></head>
-<body><div class="wrap">
-<header class="nav"><div class="logo">ResellAI Studio</div><div class="pill">V2 · MVP</div></header>
-<section class="hero"><div class="eyebrow">AI workspace per reseller</div><h1>Da una foto a un annuncio pronto.</h1><p>Carica il prodotto, scegli dove venderlo e prepara prezzo, descrizione e immagini in un unico flusso.</p></section>
-<div class="grid">
-<section class="card"><div class="eyebrow">01 · Foto</div><h2>AI Photo Studio</h2>
-<label class="upload"><input id="file" type="file" accept="image/*" capture="environment"><b>📸 Scatta o carica una foto</b><br><span style="color:#777">Il file resta nel browser in questa versione.</span></label>
-<img id="photo" class="photo hide"><div class="row" style="margin-top:10px"><button class="btn" onclick="resetPhoto()">Rimuovi</button><button class="btn primary" id="analyzeBtn" disabled="" onclick="analyze()">Analizza articolo</button></div>
-<div class="note">Il prossimo collegamento aggiungerà la Vision AI reale per brand, modello, categoria e condizioni.</div></section>
-<section class="card"><div class="eyebrow">02 · Dove venderlo</div><h2>Marketplace</h2><div id="markets" class="markets"><div class="market sel" onclick="market='Vinted';render()"><span>Vinted</span><b>›</b></div><div class="market " onclick="market='eBay';render()"><span>eBay</span><b>›</b></div><div class="market " onclick="market='Depop';render()"><span>Depop</span><b>›</b></div><div class="market " onclick="market='Grailed';render()"><span>Grailed</span><b>›</b></div><div class="market " onclick="market='Vestiaire Collective';render()"><span>Vestiaire Collective</span><b>›</b></div></div><h3>Strategia prezzo</h3><div id="goals" class="row"><button class="btn " onclick="goal='Veloce';render()">Veloce</button><button class="btn primary" onclick="goal='Equilibrato';render()">Equilibrato</button><button class="btn " onclick="goal='Profitto';render()">Profitto</button></div></section>
-<section class="card"><div class="eyebrow">03 · Analisi</div><h2 id="status">In attesa della foto</h2><div class="progress"><i id="bar"></i></div><div class="stats" style="margin-top:12px"><div class="stat"><span>Brand</span><strong id="brand">—</strong></div><div class="stat"><span>Categoria</span><strong id="cat">—</strong></div><div class="stat"><span>Condizione</span><strong id="cond">—</strong></div></div></section>
-<section class="card"><div class="eyebrow">04 · Prezzo</div><h2 id="mname">Vinted</h2><div class="price" id="price">€ 82</div><div style="color:#777">Prezzo obiettivo per la piattaforma scelta</div><div class="stats" style="margin-top:12px"><div class="stat"><span>Vendita rapida</span><strong id="fast">€ 69</strong></div><div class="stat"><span>Probabilità</span><strong id="prob">78%</strong></div><div class="stat"><span>Stima tempo</span><strong id="speed">4–10 gg</strong></div></div><div class="note">Prezzi dimostrativi: il modulo reale confronterà dati di mercato quando collegheremo le fonti.</div></section>
-<section class="card full"><div class="eyebrow">05 · Listing pack</div><h2>Annuncio pronto</h2><div id="listing" class="listing">Carica e analizza una foto per generare il testo.</div><div class="row" style="margin-top:10px"><button class="btn primary" onclick="copyListing()">Copia annuncio</button><button class="btn" onclick="aiImage()">✨ Migliora immagini con AI</button><button class="btn" onclick="compare()">Confronta marketplace</button></div></section>
-</div><p class="note" style="text-align:center">ResellAI Studio · prototipo V2</p></div>
-<script>
-const D={Vinted:{p:82,f:69,t:"4–10 gg",q:78},eBay:{p:94,f:83,t:"7–18 gg",q:71},Depop:{p:88,f:77,t:"5–15 gg",q:74},Grailed:{p:105,f:92,t:"8–20 gg",q:66},"Vestiaire Collective":{p:118,f:104,t:"10–28 gg",q:61}};
-let market="Vinted",goal="Equilibrato",ready=false;
-function render(){markets.innerHTML=Object.keys(D).map(x=>`<div class="market ${x==market?'sel':''}" onclick="market='${x}';render()"><span>${x}</span><b>›</b></div>`).join("");goals.innerHTML=["Veloce","Equilibrato","Profitto"].map(x=>`<button class="btn ${x==goal?'primary':''}" onclick="goal='${x}';render()">${x}</button>`).join("");let d=D[market],m=goal=="Veloce"?.84:goal=="Profitto"?1.14:1,p=Math.round(d.p*m);mname.textContent=market;price.textContent="€ "+p;fast.textContent="€ "+d.f;prob.textContent=d.q+"%";speed.textContent=d.t;if(ready)listing.textContent=`Titolo: Palm Angels Tokyo Logo T-Shirt Black – Size L\n\nDescrizione:\nT-shirt Palm Angels nera con logo Tokyo. Taglia L, ottime condizioni. Foto reali dell'articolo. Spedizione rapida.\n\nBrand: Palm Angels\nCategoria: T-shirt\nTaglia: L\nCondizione: Ottima\nPrezzo su ${market}: € ${p}\n\n#palmangels #streetwear #designer #tshirt`}
-file.onchange=e=>{let f=e.target.files[0];if(!f)return;photo.src=URL.createObjectURL(f);photo.classList.remove("hide");analyzeBtn.disabled=false};
-function resetPhoto(){file.value="";photo.classList.add("hide");analyzeBtn.disabled=true;ready=false;status.textContent="In attesa della foto";bar.style.width="0%";brand.textContent=cat.textContent=cond.textContent="—";listing.textContent="Carica e analizza una foto per generare il testo."}
-async function analyze(){
-  const f=file.files[0];
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#111111">
 
-  if(!f){
-    alert("Carica prima una foto.");
-    return;
+<title>ResellAI Studio</title>
+
+<style>
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  background:#f4f4f1;
+  color:#111;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+}
+
+.container{
+  width:min(1050px,calc(100% - 32px));
+  margin:auto;
+}
+
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:20px 0;
+}
+
+.logo{
+  font-size:21px;
+  font-weight:900;
+  letter-spacing:-.04em;
+}
+
+.badge{
+  background:#111;
+  color:white;
+  padding:8px 12px;
+  border-radius:99px;
+  font-size:12px;
+  font-weight:700;
+}
+
+.hero{
+  padding:42px 0 30px;
+}
+
+.eyebrow{
+  color:#777;
+  font-size:12px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+}
+
+.hero h1{
+  font-size:clamp(44px,8vw,78px);
+  line-height:.9;
+  letter-spacing:-.065em;
+  margin:12px 0;
+  max-width:850px;
+}
+
+.hero p{
+  color:#777;
+  font-size:17px;
+  max-width:700px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:15px;
+  padding-bottom:40px;
+}
+
+.card{
+  background:white;
+  border:1px solid #e5e5e1;
+  border-radius:22px;
+  padding:20px;
+  box-shadow:0 10px 40px rgba(0,0,0,.035);
+}
+
+.full{
+  grid-column:1 / -1;
+}
+
+.card h2{
+  margin:8px 0 18px;
+  letter-spacing:-.025em;
+}
+
+.upload{
+  display:block;
+  border:2px dashed #ccc;
+  border-radius:18px;
+  padding:30px 18px;
+  text-align:center;
+  background:#fafaf8;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.upload:hover{
+  border-color:#111;
+  background:#f5f5f3;
+}
+
+.upload input{
+  display:none;
+}
+
+.upload-title{
+  display:block;
+  font-weight:850;
+  font-size:17px;
+}
+
+.upload-subtitle{
+  display:block;
+  color:#777;
+  margin-top:6px;
+  font-size:13px;
+}
+
+.photo-counter{
+  margin-top:12px;
+  font-size:13px;
+  color:#777;
+}
+
+.photo-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:9px;
+  margin-top:14px;
+}
+
+.photo{
+  position:relative;
+}
+
+.photo img{
+  width:100%;
+  aspect-ratio:1;
+  object-fit:cover;
+  border-radius:13px;
+  display:block;
+  background:#eee;
+}
+
+.photo-number{
+  position:absolute;
+  left:6px;
+  top:6px;
+  background:#111;
+  color:#fff;
+  width:25px;
+  height:25px;
+  border-radius:50%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:11px;
+  font-weight:800;
+}
+
+.remove{
+  position:absolute;
+  right:6px;
+  top:6px;
+  width:27px;
+  height:27px;
+  border:0;
+  border-radius:50%;
+  background:#fff;
+  color:#111;
+  cursor:pointer;
+  font-size:18px;
+  line-height:1;
+  box-shadow:0 2px 10px rgba(0,0,0,.2);
+}
+
+textarea{
+  width:100%;
+  min-height:125px;
+  padding:15px;
+  border:1px solid #ddd;
+  border-radius:14px;
+  font:inherit;
+  resize:vertical;
+  outline:none;
+}
+
+textarea:focus{
+  border-color:#111;
+}
+
+.helper{
+  color:#888;
+  font-size:12px;
+  margin-top:8px;
+  line-height:1.5;
+}
+
+.market-grid{
+  display:grid;
+  gap:8px;
+}
+
+.market{
+  border:1px solid #e2e2de;
+  border-radius:13px;
+  padding:13px;
+  display:flex;
+  justify-content:space-between;
+  cursor:pointer;
+  transition:.15s;
+}
+
+.market.selected{
+  border:2px solid #111;
+  background:#f7f7f5;
+}
+
+.goal-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:10px;
+}
+
+button{
+  font:inherit;
+}
+
+.btn{
+  border:1px solid #ddd;
+  background:#fff;
+  color:#111;
+  border-radius:12px;
+  padding:11px 14px;
+  font-weight:750;
+  cursor:pointer;
+  transition:.15s;
+}
+
+.btn:hover{
+  transform:translateY(-1px);
+}
+
+.btn.primary{
+  background:#111;
+  border-color:#111;
+  color:#fff;
+}
+
+.btn:disabled{
+  opacity:.4;
+  cursor:not-allowed;
+  transform:none;
+}
+
+.analysis-status{
+  font-weight:800;
+  margin-bottom:12px;
+}
+
+.progress{
+  width:100%;
+  height:8px;
+  background:#e9e9e6;
+  border-radius:99px;
+  overflow:hidden;
+}
+
+.progress-bar{
+  width:0;
+  height:100%;
+  background:#111;
+  transition:width .4s;
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:9px;
+  margin-top:14px;
+}
+
+.stat{
+  background:#f6f6f3;
+  border-radius:14px;
+  padding:13px;
+}
+
+.stat-label{
+  display:block;
+  color:#777;
+  font-size:11px;
+}
+
+.stat-value{
+  display:block;
+  margin-top:5px;
+  font-size:17px;
+  font-weight:850;
+}
+
+.price{
+  font-size:54px;
+  line-height:1;
+  font-weight:950;
+  letter-spacing:-.06em;
+  margin:10px 0 5px;
+}
+
+.price-label{
+  color:#777;
+  font-size:13px;
+}
+
+.listing{
+  background:#f6f6f3;
+  border-radius:16px;
+  padding:18px;
+  white-space:pre-wrap;
+  line-height:1.55;
+  min-height:240px;
+}
+
+.button-row{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:12px;
+}
+
+.notice{
+  padding:13px;
+  border-radius:13px;
+  background:#f6f6f3;
+  color:#666;
+  font-size:13px;
+  line-height:1.5;
+}
+
+footer{
+  text-align:center;
+  color:#888;
+  font-size:12px;
+  padding:10px 0 30px;
+}
+
+@media(max-width:720px){
+
+  .container{
+    width:min(100% - 20px,1050px);
   }
 
-  status.textContent="Preparazione immagine…";
-  bar.style.width="20%";
-  analyzeBtn.disabled=true;
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  .full{
+    grid-column:auto;
+  }
+
+  .hero{
+    padding-top:25px;
+  }
+
+  .photo-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .stats{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .price{
+    font-size:46px;
+  }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<header>
+
+  <div class="logo">
+    ResellAI Studio
+  </div>
+
+  <div class="badge">
+    AI RESELLER
+  </div>
+
+</header>
+
+
+<section class="hero">
+
+  <div class="eyebrow">
+    AI workspace per reseller
+  </div>
+
+  <h1>
+    Da 1–8 foto a un annuncio pronto.
+  </h1>
+
+  <p>
+    Carica le foto del tuo articolo, aggiungi qualche dettaglio
+    e lascia che l'intelligenza artificiale prepari un annuncio
+    ottimizzato per la vendita.
+  </p>
+
+</section>
+
+
+<div class="grid">
+
+
+<!-- FOTO -->
+
+<section class="card full">
+
+  <div class="eyebrow">
+    01 · Fotografie
+  </div>
+
+  <h2>
+    📸 Foto dell'articolo
+  </h2>
+
+  <label class="upload">
+
+    <input
+      id="fileInput"
+      type="file"
+      accept="image/jpeg,image/png,image/webp"
+      multiple
+    >
+
+    <span class="upload-title">
+      🖼️ Scegli fino a 8 foto dalla galleria
+    </span>
+
+    <span class="upload-subtitle">
+      Puoi selezionare più immagini contemporaneamente.
+    </span>
+
+  </label>
+
+  <div
+    id="photoCounter"
+    class="photo-counter"
+  >
+    0 / 8 foto
+  </div>
+
+  <div
+    id="photoGrid"
+    class="photo-grid"
+  ></div>
+
+</section>
+
+
+<!-- DESCRIZIONE UTENTE -->
+
+<section class="card full">
+
+  <div class="eyebrow">
+    02 · Informazioni
+  </div>
+
+  <h2>
+    💬 Raccontaci qualcosa dell'articolo
+  </h2>
+
+  <textarea
+    id="userDescription"
+    placeholder="Esempio: indossate poche volte, acquistate in negozio ufficiale, scatola originale inclusa, piccolo segno sulla suola..."
+  ></textarea>
+
+  <div class="helper">
+    Queste informazioni verranno unite a ciò che l'AI vede nelle
+    fotografie per creare un annuncio più preciso e credibile.
+  </div>
+
+</section>
+
+
+<!-- MARKETPLACE -->
+
+<section class="card">
+
+  <div class="eyebrow">
+    03 · Marketplace
+  </div>
+
+  <h2>
+    Dove vuoi venderlo?
+  </h2>
+
+  <div
+    id="marketGrid"
+    class="market-grid"
+  ></div>
+
+  <h3>
+    Strategia prezzo
+  </h3>
+
+  <div
+    id="goalRow"
+    class="goal-row"
+  ></div>
+
+</section>
+
+
+<!-- ANALISI -->
+
+<section class="card">
+
+  <div class="eyebrow">
+    04 · Analisi AI
+  </div>
+
+  <h2 id="status">
+    In attesa delle foto
+  </h2>
+
+  <div class="progress">
+    <div
+      id="progressBar"
+      class="progress-bar"
+    ></div>
+  </div>
+
+  <div class="stats">
+
+    <div class="stat">
+      <span class="stat-label">
+        Brand
+      </span>
+      <strong
+        id="brand"
+        class="stat-value"
+      >
+        —
+      </strong>
+    </div>
+
+    <div class="stat">
+      <span class="stat-label">
+        Categoria
+      </span>
+      <strong
+        id="category"
+        class="stat-value"
+      >
+        —
+      </strong>
+    </div>
+
+    <div class="stat">
+      <span class="stat-label">
+        Condizione
+      </span>
+      <strong
+        id="condition"
+        class="stat-value"
+      >
+        —
+      </strong>
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- AZIONE -->
+
+<section class="card full">
+
+  <div class="button-row">
+
+    <button
+      id="resetButton"
+      class="btn"
+      onclick="resetAll()"
+    >
+      🗑️ Rimuovi foto
+    </button>
+
+    <button
+      id="analyzeButton"
+      class="btn primary"
+      disabled
+      onclick="analyze()"
+    >
+      🚀 Analizza e crea annuncio
+    </button>
+
+  </div>
+
+</section>
+
+
+<!-- PREZZO -->
+
+<section class="card">
+
+  <div class="eyebrow">
+    05 · Prezzo
+  </div>
+
+  <h2 id="marketName">
+    Vinted
+  </h2>
+
+  <div
+    id="price"
+    class="price"
+  >
+    —
+  </div>
+
+  <div class="price-label">
+    Prezzo consigliato
+  </div>
+
+  <div class="stats">
+
+    <div class="stat">
+
+      <span class="stat-label">
+        ⚡ Vendita rapida
+      </span>
+
+      <strong
+        id="quickPrice"
+        class="stat-value"
+      >
+        —
+      </strong>
+
+    </div>
+
+    <div class="stat">
+
+      <span class="stat-label">
+        ⭐ Confidenza AI
+      </span>
+
+      <strong
+        id="confidence"
+        class="stat-value"
+      >
+        —
+      </strong>
+
+    </div>
+
+    <div class="stat">
+
+      <span class="stat-label">
+        📅 Vendita stimata
+      </span>
+
+      <strong
+        id="estimatedDays"
+        class="stat-value"
+      >
+        —
+      </strong>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ANNUNCIO -->
+
+<section class="card">
+
+  <div class="eyebrow">
+    06 · Listing
+  </div>
+
+  <h2>
+    ✨ Annuncio pronto
+  </h2>
+
+  <div
+    id="listing"
+    class="listing"
+  >
+    Carica le foto e premi
+    "Analizza e crea annuncio".
+  </div>
+
+  <div class="button-row">
+
+    <button
+      class="btn primary"
+      onclick="copyListing()"
+    >
+      📋 Copia annuncio
+    </button>
+
+    <button
+      class="btn"
+      onclick="improveImages()"
+    >
+      ✨ Migliora immagini
+    </button>
+
+  </div>
+
+</section>
+
+
+</div>
+
+
+<div class="notice">
+
+  💡 <strong>Consiglio:</strong>
+  aggiungi più foto possibili: fronte, retro, etichetta,
+  dettagli, logo e eventuali difetti. Più informazioni
+  fornisci, più accurata sarà l'analisi.
+
+</div>
+
+
+<footer>
+  ResellAI Studio · AI Reseller
+</footer>
+
+</div>
+
+
+<script>
+
+const state = {
+
+  marketplace:"Vinted",
+
+  goal:"Equilibrato",
+
+  files:[]
+
+};
+
+
+const marketplaces = [
+
+  "Vinted",
+  "eBay",
+  "Depop",
+  "Grailed",
+  "Vestiaire Collective"
+
+];
+
+
+const goals = [
+
+  "Veloce",
+  "Equilibrato",
+  "Profitto"
+
+];
+
+
+const fileInput =
+  document.getElementById("fileInput");
+
+const photoGrid =
+  document.getElementById("photoGrid");
+
+const photoCounter =
+  document.getElementById("photoCounter");
+
+const analyzeButton =
+  document.getElementById("analyzeButton");
+
+const status =
+  document.getElementById("status");
+
+const progressBar =
+  document.getElementById("progressBar");
+
+const marketGrid =
+  document.getElementById("marketGrid");
+
+const goalRow =
+  document.getElementById("goalRow");
+
+const marketName =
+  document.getElementById("marketName");
+
+const brand =
+  document.getElementById("brand");
+
+const category =
+  document.getElementById("category");
+
+const condition =
+  document.getElementById("condition");
+
+const price =
+  document.getElementById("price");
+
+const quickPrice =
+  document.getElementById("quickPrice");
+
+const confidence =
+  document.getElementById("confidence");
+
+const estimatedDays =
+  document.getElementById("estimatedDays");
+
+const listing =
+  document.getElementById("listing");
+
+const userDescription =
+  document.getElementById("userDescription");
+
+
+/* MARKETPLACE */
+
+function renderMarketplaces(){
+
+  marketGrid.innerHTML =
+    marketplaces.map(name => {
+
+      const selected =
+        name === state.marketplace
+          ? "selected"
+          : "";
+
+      return `
+        <div
+          class="market ${selected}"
+          onclick="selectMarketplace('${name}')"
+        >
+
+          <span>${name}</span>
+
+          <b>›</b>
+
+        </div>
+      `;
+
+    }).join("");
+
+  marketName.textContent =
+    state.marketplace;
+
+}
+
+
+/* STRATEGIA */
+
+function renderGoals(){
+
+  goalRow.innerHTML =
+    goals.map(name => {
+
+      const selected =
+        name === state.goal
+          ? "primary"
+          : "";
+
+      return `
+        <button
+          class="btn ${selected}"
+          onclick="selectGoal('${name}')"
+        >
+          ${name}
+        </button>
+      `;
+
+    }).join("");
+
+}
+
+
+function selectMarketplace(name){
+
+  state.marketplace =
+    name;
+
+  renderMarketplaces();
+
+}
+
+
+function selectGoal(name){
+
+  state.goal =
+    name;
+
+  renderGoals();
+
+}
+
+
+/* FOTO */
+
+fileInput.addEventListener(
+  "change",
+  handleFiles
+);
+
+
+function handleFiles(event){
+
+  const files =
+    Array.from(
+      event.target.files || []
+    );
+
+  const available =
+    8 - state.files.length;
+
+  if(available <= 0){
+
+    alert(
+      "Hai già raggiunto il limite di 8 foto."
+    );
+
+    return;
+
+  }
+
+  const selected =
+    files.slice(
+      0,
+      available
+    );
+
+  state.files.push(
+    ...selected
+  );
+
+  if(files.length > available){
+
+    alert(
+      "Puoi caricare massimo 8 foto."
+    );
+
+  }
+
+  fileInput.value = "";
+
+  renderPhotos();
+
+}
+
+
+function renderPhotos(){
+
+  photoGrid.innerHTML = "";
+
+  state.files.forEach(
+    (file,index) => {
+
+      const wrapper =
+        document.createElement("div");
+
+      wrapper.className =
+        "photo";
+
+      const image =
+        document.createElement("img");
+
+      image.src =
+        URL.createObjectURL(file);
+
+      const number =
+        document.createElement("div");
+
+      number.className =
+        "photo-number";
+
+      number.textContent =
+        index + 1;
+
+      const remove =
+        document.createElement("button");
+
+      remove.className =
+        "remove";
+
+      remove.textContent =
+        "×";
+
+      remove.onclick =
+        () => removePhoto(index);
+
+      wrapper.appendChild(image);
+
+      wrapper.appendChild(number);
+
+      wrapper.appendChild(remove);
+
+      photoGrid.appendChild(wrapper);
+
+    }
+  );
+
+
+  photoCounter.textContent =
+    `${state.files.length} / 8 foto`;
+
+
+  analyzeButton.disabled =
+    state.files.length === 0;
+
+
+  if(state.files.length > 0){
+
+    status.textContent =
+      `${state.files.length} foto pronte per l'analisi`;
+
+  }else{
+
+    status.textContent =
+      "In attesa delle foto";
+
+  }
+
+}
+
+
+function removePhoto(index){
+
+  state.files.splice(
+    index,
+    1
+  );
+
+  renderPhotos();
+
+}
+
+
+/* CONVERSIONE FOTO */
+
+function fileToDataURL(file){
+
+  return new Promise(
+    (resolve,reject) => {
+
+      const reader =
+        new FileReader();
+
+      reader.onload =
+        () => resolve(
+          reader.result
+        );
+
+      reader.onerror =
+        reject;
+
+      reader.readAsDataURL(file);
+
+    }
+  );
+
+}
+
+
+/* ANALISI */
+
+async function analyze(){
+
+  if(state.files.length === 0){
+
+    alert(
+      "📸 Carica almeno una foto."
+    );
+
+    return;
+
+  }
+
+
+  analyzeButton.disabled =
+    true;
+
+  status.textContent =
+    "Preparazione delle foto…";
+
+  progressBar.style.width =
+    "10%";
+
 
   try{
-    const image=await fileToDataURL(f);
 
-    status.textContent="Vision AI sta analizzando…";
-    bar.style.width="50%";
+    const images =
+      await Promise.all(
+        state.files.map(
+          fileToDataURL
+        )
+      );
 
-    const response=await fetch("/api/analyze",{
-      method:"POST",
-      headers:{
-        "Content-Type":"application/json"
-      },
-      body:JSON.stringify({
-        image,
-        marketplace:market,
-        goal
-      })
-    });
 
-    const data=await response.json();
+    status.textContent =
+      `🤖 Gemini sta analizzando ${images.length} foto…`;
+
+    progressBar.style.width =
+      "40%";
+
+
+    const response =
+      await fetch(
+        "/api/analyze",
+        {
+
+          method:"POST",
+
+          headers:{
+            "Content-Type":
+              "application/json"
+          },
+
+          body:JSON.stringify({
+
+            images,
+
+            userDescription:
+              userDescription.value.trim(),
+
+            marketplace:
+              state.marketplace,
+
+            goal:
+              state.goal
+
+          })
+
+        }
+      );
+
+
+    const data =
+      await response.json();
+
 
     if(!response.ok){
-      throw new Error(data.error || "Errore durante l'analisi.");
+
+      throw new Error(
+        data.error ||
+        "Errore durante l'analisi."
+      );
+
     }
 
-    bar.style.width="85%";
 
-    brand.textContent=data.brand || "Non identificato";
-    cat.textContent=data.category || "Non identificato";
-    cond.textContent=data.condition || "Non identificato";
+    progressBar.style.width =
+      "80%";
 
-    const targetPrice=
-      goal==="Veloce"
+
+    /* DATI */
+
+    brand.textContent =
+      data.brand ||
+      "Non identificato";
+
+    category.textContent =
+      data.category ||
+      "Non identificata";
+
+    condition.textContent =
+      data.condition ||
+      "Non identificata";
+
+
+    /* PREZZO */
+
+    const recommendedPrice =
+      state.goal === "Veloce"
         ? data.quick_sale_price_eur
         : data.estimated_price_eur;
 
-    price.textContent=
-      "€ "+(Number(targetPrice)||0);
 
-    fast.textContent=
-      "€ "+(Number(data.quick_sale_price_eur)||0);
+    price.textContent =
+      "€ " +
+      (Number(
+        recommendedPrice
+      ) || 0);
 
-    speed.textContent=
-      data.estimated_days || "—";
 
-    prob.textContent=
+    quickPrice.textContent =
+      "€ " +
+      (
+        Number(
+          data.quick_sale_price_eur
+        ) || 0
+      );
+
+
+    /* CONFIDENZA */
+
+    confidence.textContent =
       data.confidence
-        ? Math.round(Number(data.confidence)*100)+"%"
+        ? Math.round(
+            Number(
+              data.confidence
+            ) * 100
+          ) + "%"
         : "—";
 
-    const hashtags=Array.isArray(data.hashtags)
-      ? data.hashtags.join(" ")
-      : "";
 
-    listing.textContent=
-`Titolo:
+    /* TEMPO */
+
+    estimatedDays.textContent =
+      data.estimated_days ||
+      "—";
+
+
+    /* HASHTAG */
+
+    const hashtags =
+      Array.isArray(
+        data.hashtags
+      )
+        ? data.hashtags.join(" ")
+        : "";
+
+
+    /* LISTING */
+
+    listing.textContent =
+
+`🏷️ TITOLO
+
 ${data.title || "Titolo non disponibile"}
 
-Descrizione:
+
+📝 DESCRIZIONE
+
 ${data.description || "Descrizione non disponibile"}
+
+
+📦 DETTAGLI
 
 Brand: ${data.brand || "Non identificato"}
 Modello: ${data.model || "Non identificato"}
-Categoria: ${data.category || "Non identificato"}
+Categoria: ${data.category || "Non identificata"}
 Colore: ${data.color || "Non identificato"}
 Taglia: ${data.size || "Non identificata"}
 Condizione: ${data.condition || "Non identificata"}
 
-Prezzo consigliato su ${market}: € ${Number(targetPrice)||0}
-Vendita rapida: € ${Number(data.quick_sale_price_eur)||0}
+
+💶 PREZZO CONSIGLIATO
+
+€ ${Number(recommendedPrice) || 0}
+
+
+⚡ PREZZO VENDITA RAPIDA
+
+€ ${Number(data.quick_sale_price_eur) || 0}
+
+
+#️⃣ HASHTAG
 
 ${hashtags}`;
 
-    ready=true;
-    status.textContent="Analisi completata ✓";
-    bar.style.width="100%";
+
+    progressBar.style.width =
+      "100%";
+
+    status.textContent =
+      "✨ Analisi completata!";
+
 
   }catch(error){
-    console.error(error);
 
-    status.textContent="Errore durante l'analisi";
-    bar.style.width="0%";
+    console.error(
+      "ResellAI error:",
+      error
+    );
 
-    alert(error.message || "Non è stato possibile analizzare la foto.");
+    progressBar.style.width =
+      "0%";
+
+    status.textContent =
+      "❌ Errore durante l'analisi";
+
+    alert(
+      error.message ||
+      "Non è stato possibile completare l'analisi."
+    );
+
 
   }finally{
-    analyzeBtn.disabled=false;
+
+    analyzeButton.disabled =
+      state.files.length === 0;
+
   }
+
 }
 
-function fileToDataURL(file){
-  return new Promise((resolve,reject)=>{
-    const reader=new FileReader();
 
-    reader.onload=()=>{
-      resolve(reader.result);
-    };
+/* COPIA */
 
-    reader.onerror=reject;
+function copyListing(){
 
-    reader.readAsDataURL(file);
-  });
+  const text =
+    listing.textContent.trim();
+
+  if(!text){
+
+    alert(
+      "Non c'è ancora nessun annuncio da copiare."
+    );
+
+    return;
+
+  }
+
+
+  if(
+    navigator.clipboard &&
+    navigator.clipboard.writeText
+  ){
+
+    navigator.clipboard.writeText(
+      text
+    );
+
+    alert(
+      "📋 Annuncio copiato!"
+    );
+
+  }else{
+
+    alert(
+      "Seleziona e copia manualmente il testo."
+    );
+
+  }
+
 }
-function copyListing(){navigator.clipboard?.writeText(listing.textContent);alert("Annuncio copiato negli appunti.")}
-function aiImage(){alert("Il pulsante è pronto: nel prossimo step collegheremo il generatore AI per sfondo, crop e immagini ottimizzate per il marketplace.")}
-function compare(){alert(Object.entries(D).map(([k,v])=>`${k}: €${v.p} · ${v.q}% · ${v.t}`).join("\n"))}
-render();
-</script></body></html>
+
+
+/* RESET */
+
+function resetAll(){
+
+  state.files = [];
+
+  fileInput.value = "";
+
+  userDescription.value = "";
+
+  renderPhotos();
+
+  brand.textContent = "—";
+
+  category.textContent = "—";
+
+  condition.textContent = "—";
+
+  price.textContent = "—";
+
+  quickPrice.textContent = "—";
+
+  confidence.textContent = "—";
+
+  estimatedDays.textContent = "—";
+
+  progressBar.style.width =
+    "0%";
+
+  status.textContent =
+    "In attesa delle foto";
+
+  listing.textContent =
+    'Carica le foto e premi "Analizza e crea annuncio".';
+
+}
+
+
+/* MIGLIORA FOTO */
+
+function improveImages(){
+
+  alert(
+    "✨ La funzione di ottimizzazione professionale delle foto sarà collegata nel prossimo aggiornamento."
+  );
+
+}
+
+
+/* AVVIO */
+
+renderMarketplaces();
+
+renderGoals();
+
+renderPhotos();
+
+</script>
+
+</body>
+</html>
